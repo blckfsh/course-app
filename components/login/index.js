@@ -1,11 +1,20 @@
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
-    const onSubmit = async (data) => {        
+    const onSubmit = async (data) => {
         console.log(data);
+
+        const res = await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+        });
+
+        console.log(res);
     }
 
     return (
@@ -21,7 +30,7 @@ export default function Login() {
                                 <Link href="/signup">
                                     <a className="rounded-3xl border-2 border-white py-2 px-3">Sign up now</a>
                                 </Link>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,7 +81,7 @@ export default function Login() {
                                 <div className="mt-2">
                                     <Link href="/forgot">
                                         <a className="text-blue-800 font-semibold">Forgot Password</a>
-                                    </Link>                                    
+                                    </Link>
                                 </div>
                                 <div className="mt-5 flex justify-center">
                                     <button type="submit" className="flex w-full justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
