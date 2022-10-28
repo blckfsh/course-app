@@ -6,7 +6,7 @@ export default function Signup() {
     const registerUser = async (user) => {
         const isUserExisting = await axios.get(`/api/user/${user.email}`);        
 
-        if (isUserExisting.status === 200) {
+        if (isUserExisting.data.length = 0) {
             const action = await axios.post("/api/user", user);
             console.log(action);
         }

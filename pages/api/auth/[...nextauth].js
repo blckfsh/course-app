@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
+import bcrypt from "bcryptjs";
 
 const authOptions = {
     session: {
@@ -9,21 +11,29 @@ const authOptions = {
         CredentialsProvider({
             type: "credentials",
             credentials: {},
-            authorize(credentials, req) {
+            async authorize(credentials, req) {
                 const { email, password } = credentials;
-                // perform you login logic
-                // find out user from db
-                if (email !== "john@gmail.com" || password !== "1234") {
-                    throw new Error("invalid credentials");
-                }
+                const isEmailExisting = await axios.get(`http://localhost:3000/api/user/${email}`);
 
-                // if everything is fine
-                return {
-                    id: "1234",
-                    name: "John Doe",
-                    email: "john@gmail.com",
-                    role: "admin",
-                };
+                if (isEmailExisting.data.data.length > 0) {
+                    let { _id, firstname, lastname, email, status } = isEmailExisting.data.data;
+                    let hash = isEmailExisting.data.data[0].password;
+                    let isPasswordMatch = await bcrypt.compare(password, hash);
+
+                    console.log(isPasswordMatch);
+                    if (isPasswordMatch == false) {                                     
+                        throw new Error("invalid credentials");
+                    }
+                
+                    // if everything is fine
+                    return {
+                        id: _id,
+                        name: firstname + " " + lastname,
+                        email,
+                        status
+                        // role: "admin",
+                    };
+                }
             },
         }),
     ],
