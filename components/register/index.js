@@ -19,6 +19,7 @@ export default function Register(props) {
             email,
             password: encryptPassword
         }
+
         if (confirm === password) props.registerUser(newUser);
     }
 
