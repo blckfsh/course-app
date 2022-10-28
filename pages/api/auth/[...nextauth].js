@@ -16,7 +16,7 @@ const authOptions = {
                 const isEmailExisting = await axios.get(`http://localhost:3000/api/user/${email}`);
 
                 if (isEmailExisting.data.data.length > 0) {
-                    let { _id, firstname, lastname, email, status } = isEmailExisting.data.data;
+                    let { _id, firstname, lastname, email, status } = isEmailExisting.data.data[0];
                     let hash = isEmailExisting.data.data[0].password;
                     let isPasswordMatch = await bcrypt.compare(password, hash);
 

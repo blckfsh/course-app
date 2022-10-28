@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 export default function Login() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const router = useRouter();
 
     const onSubmit = async (data) => {
         // console.log(data);
@@ -14,7 +16,7 @@ export default function Login() {
             redirect: false,
         });
 
-        // console.log(res);
+        if (res.status == 200) router.replace("/");
     }
 
     return (
