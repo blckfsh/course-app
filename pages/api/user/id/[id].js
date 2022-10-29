@@ -9,8 +9,8 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const email = req.query.email;
-                const user = await User.find({ email });
+                const id = req.query.id;
+                const user = await User.find({_id: id});
 
                 res.status(200).json({ success: true, data: user })
             } catch (error) {

@@ -1,11 +1,11 @@
 import Navigation from "../navigation";
-import Dashboard from "../dashboard";
+import Redeem from "../dashboard/redeem";
+import Students from "../dashboard/students";
 
-export default function Layout(props) {
-    return(
+export default function Layout() {
+    return (
         <div>
-            <Navigation />
-            <Dashboard name={props.name} />
+            <Navigation />      
         </div>
     )
 }
