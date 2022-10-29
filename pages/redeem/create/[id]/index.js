@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import voucher_codes from "voucher-code-generator";
@@ -12,6 +12,7 @@ export default function CreateRedeem() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [redeemCode, setRedeemCode] = useState(" ");
+    const [isExpire, isSetExpire] = useState(false);
 
     const getDetails = async (id) => {
         const action = await axios.get(`/api/user/id/${id}`);
@@ -19,6 +20,13 @@ export default function CreateRedeem() {
 
         setName(firstname + " " + lastname);
         setEmail(email);
+    }
+
+    const isUserExisting = async () => {
+        const action = await axios.get(`/api/redeem/${router.query.id}`);
+
+        isSetExpire(action.data.data[0].isExpired);
+        return action;
     }
 
     const generateCode = async () => {
@@ -37,15 +45,29 @@ export default function CreateRedeem() {
         }
         setRedeemCode(generate.toString());
         
-        const isUserExisting = await axios.get(`/api/redeem/${router.query.id}`);
+        const isExisting = await isUserExisting();
 
-        if (isUserExisting.data.data.length > 0) {
+        if (isExisting.data.data.length > 0) {
             console.log("patch");
             await axios.patch(`/api/redeem/${router.query.id}`, updateCode);                        
         } else {
             await axios.post("/api/redeem", newCode);
             console.log("post");
-        }        
+        }
+        await isUserExisting();  
+    }
+
+    const disableCode = async () => {
+        const isExisting = await isUserExisting();
+
+        if (isExisting.data.data.length > 0) {
+            const updateToExpired = {
+                isExpired: !isExisting.data.data[0].isExpired
+            }
+
+            await axios.patch(`/api/redeem/${router.query.id}`, updateToExpired);
+            await isUserExisting();
+        }
     }
 
     useEffect(() => {
@@ -58,7 +80,14 @@ export default function CreateRedeem() {
     return (
         <div>
             <Layout />
-            <Create name={name} email={email} redeemCode={redeemCode} generateCode={generateCode} />
+            <Create 
+                name={name} 
+                email={email} 
+                redeemCode={redeemCode} 
+                generateCode={generateCode} 
+                disableCode={disableCode} 
+                isExpire={isExpire} 
+            />
         </div>
     )
 }
