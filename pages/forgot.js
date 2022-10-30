@@ -23,8 +23,6 @@ export default function Forgot() {
             length: 10,
             count: 1
         });
-
-        
         
         if (isCodeForUserExists.length > 0) {
             const updateCode = {

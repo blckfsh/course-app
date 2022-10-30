@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { passwordStrength } from "check-password-strength";
@@ -119,9 +120,11 @@ export default function ForgotPassword(props) {
                                     </form> : ""
                             }
                             <div className="mt-2 flex justify-center">
-                                <a className="flex w-full justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
-                                    Go To Login
-                                </a>
+                                <Link href="/">
+                                    <a className="flex w-full justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
+                                        Go To Login
+                                    </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
