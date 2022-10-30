@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { passwordStrength } from "check-password-strength";
@@ -114,7 +113,7 @@ export default function Register(props) {
                                             : "text-xs text-green-500"                                             
                                         }>
                                             Pasword Strength: {passwordStrength(indicator).value}
-                                        </label>
+                                    </label>
                                     {errors.password && <span className="text-red-900 text-sm font-thin">* {errors.password.message}</span>}
                                     <div className="mt-1 flex rounded-md shadow-sm">
                                         <input

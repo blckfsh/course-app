@@ -15,6 +15,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",

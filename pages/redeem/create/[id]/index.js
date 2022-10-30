@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import voucher_codes from "voucher-code-generator";
