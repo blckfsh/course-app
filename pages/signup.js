@@ -1,95 +1,151 @@
 import { useState } from "react";
-import axios from "axios";
-import voucher_codes from "voucher-code-generator";
+import { useRouter } from "next/router";
 import Register from "../components/register";
+import ModalPopup from "../components/modal";
+import {
+    getUserCodeByEmail,
+    generate,
+    updateVerificationCode,
+    createNewVerificationCode,
+    getVerificationCode,
+    getUserByEmail,
+    createUser
+} from "./api/methods/actions";
 
 export default function Signup() {
+    let modalResponse = {};
+    const router = useRouter();
     const [code, setCode] = useState("");
     const [email, setEmail] = useState("");
     const [isEmailLegit, setIsEmailLegit] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({});
+    
+    const openModal = async () => await setModalIsOpen(true);
+    const closeModal = async () => await setModalIsOpen(false);
+    const afterOpenModal = () => console.log("after opening the modal");
 
-    const isUserHasCode = async (email) => {
-        const action = await axios.get(`/api/auth/verify/email/${email}`);
-
-        return action.data.code;
-    }
-
-    const receiveVerificationCode = async (value) => {
-        const isCodeForUserExists = await isUserHasCode(value);
-        const generate = await voucher_codes.generate({
-            length: 10,
-            count: 1
-        });
+    const receiveVerificationCode = async (email) => {
+        const isCodeForUserExists = await getUserCodeByEmail(email);
+        const generatedCode = await generate();
+        let updatedCode = {
+            email,
+            code: generatedCode.toString(),
+            isVerified: false
+        }
+        let newCode = {
+            email,
+            code: generatedCode.toString()
+        }
 
         if (isCodeForUserExists.length > 0) {
-            const updateCode = {
-                email: value,
-                code: generate.toString(),
-                isVerified: false
-            }
-            console.log("patch");
-            const action = await axios.patch(`/api/auth/verify/email/${value}`, updateCode);
-            console.log(action);
-        } else {
-            const newCode = {
-                email: value,
-                code: generate.toString()
-            }
-            const action2 = await axios.post(`/api/auth/verify/${generate.toString()}`, newCode);
-            console.log(action2);
-        }
-        setIsEmailLegit(true);
-    }
+            const callUpdateCode = await updateVerificationCode(email, updatedCode);
+            console.log(callUpdateCode);
 
-    const verifyCode = async (value) => {
-        const action = await axios.get(`/api/auth/verify/${value}`);
-
-        if (action.data.content.length > 0) {
-            const emailAddress = action.data.content[0].email;
-            const { code, isVerified } = action.data.content[0];
-
-            console.log(code);
-            console.log(value);
-
-            if (isVerified == false) {
-                if (emailAddress == email && code == value) {
-                    console.log("working");
-                    setIsVerified(true);
-
-                    let updatedCode = {
-                        isVerified: true
-                    }
-                    let action2 = await axios.patch(`/api/auth/verify/${value}`, updatedCode);
-                    if (action2.status == 201) setIsVerified(true)
+            if (callUpdateCode.status == 201) {
+                modalResponse = {
+                    title: "Sent Verification",
+                    message: "Check your email for verification code."
                 }
             }
         } else {
-            console.log("Incorrect Code");
+            const callCreateCode = await createNewVerificationCode(email, newCode);
+            if (callCreateCode.status == 201) {
+                modalResponse = {
+                    title: "Sent Verification",
+                    message: "Check your email for verification code."
+                }
+            }
         }
+        setIsEmailLegit(true);
+        setModalContent(modalResponse);
+        openModal();
+    }
+
+    const verifyCode = async (value) => {
+        const isCodeExisting = await getVerificationCode(value);
+
+        if (isCodeExisting.data.content.length > 0) {
+            const emailAddress = isCodeExisting.data.content[0].email;
+            const { code, isVerified } = isCodeExisting.data.content[0];
+
+            if (isVerified == false) {
+                if (emailAddress == email && code == value) {
+                    let updatedCode = { isVerified: true }
+                    setIsVerified(true);
+
+                    let callUpdateCode = await updateVerificationCode(email, updatedCode);
+                    if (callUpdateCode.status == 201) {
+                        modalResponse = {
+                            title: "Code Verification",
+                            message: "The verification was successful."
+                        }
+                        setIsVerified(true);                                                
+                    }
+                }
+            }
+        } else {
+            modalResponse = {
+                title: "Code Verification",
+                message: "Incorrect Code"
+            }
+        }
+        setModalContent(modalResponse);
+        openModal();
     }
 
     const registerUser = async (user) => {
-        const isUserExisting = await axios.get(`/api/user/${user.email}`);
+        const isUserExisting = await getUserByEmail(user.email);
 
-        if (isUserExisting.data.data.length = []) {
-            const action = await axios.post("/api/user", user);
-
+        if (isUserExisting.data.data.length < 1) {
+            const action = await createUser(user);
             console.log(action);
+            if (action.status == 201) {
+                modalResponse = {
+                    title: "User Registration",
+                    message: "Your registration is successful"
+                }
+                setModalContent(modalResponse);
+                openModal();
+                setTimeout(() => {
+                    router.replace("/");
+                }, 3000);
+            } else {
+                modalResponse = {
+                    title: "User Registration",
+                    message: "Oops. The registration failed."
+                }
+            }
+        } else {
+            modalResponse = {
+                title: "User Registration",
+                message: "The account has already registered."
+            }
         }
+        await setModalContent(modalResponse);
+        await openModal();
     }
 
     return (
-        <Register
-            email={email}
-            setEmail={setEmail}
-            code={code}
-            isEmailLegit={isEmailLegit}
-            isVerified={isVerified}
-            setCode={setCode}
-            registerUser={registerUser}
-            receiveVerificationCode={receiveVerificationCode}
-            verifyCode={verifyCode}            
-        />
+        <>
+            <Register
+                email={email}
+                setEmail={setEmail}
+                code={code}
+                isEmailLegit={isEmailLegit}
+                isVerified={isVerified}
+                setCode={setCode}
+                registerUser={registerUser}
+                receiveVerificationCode={receiveVerificationCode}
+                verifyCode={verifyCode}
+            />
+            <ModalPopup 
+                isOpen={modalIsOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                modalContent={modalContent}
+            />
+        </>
     )
 }

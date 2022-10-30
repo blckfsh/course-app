@@ -3,9 +3,28 @@
 @tailwind utilities;
 
 body {
-    /* background-color: rgb(103 232 249 / 1); */
-    background: #fff;
-    height: 100%;
-    min-height: 100vh;
-    color: #000;
+  /* background-color: rgb(103 232 249 / 1); */
+  background: #fff;
+  height: 100%;
+  min-height: 100vh;
+  color: #000;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  margin: auto;  
+  background-color: #e6e6e6;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
 }

@@ -2,32 +2,28 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { passwordStrength } from "check-password-strength";
-import bcrypt from "bcryptjs";
+
+import { encryptPassword } from "../../pages/api/methods/actions";
 
 export default function Register(props) {
-    console.log(props.isEmailLegit);
-    console.log(props.isVerified);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [indicator, setIndicator] = useState('');
 
     const onSubmit = async (data) => {
         const { firstname, lastname, password, confirm } = data;
-        const saltRounds = 10;
-        const encryptPassword = await bcrypt.hash(password, saltRounds);
-
+        const encryptedPassword = await encryptPassword(password);
         const newUser = {
             firstname,
             lastname,
             email: props.email,
-            password: encryptPassword
+            password: encryptedPassword
         }
-
         if (confirm === password) props.registerUser(newUser);
     }
 
     return (
         <div>
-            <div className="flex">
+            <div className="flex h-screen">
                 <div className="flex-none w-2/3">
                     <div className="flex justify-center items-center bg-[url('/image1.jpg')] bg-cover h-full">
 
