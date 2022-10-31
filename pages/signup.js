@@ -31,17 +31,16 @@ export default function Signup() {
         const generatedCode = await generate();
         let updatedCode = {
             email,
-            code: generatedCode.toString(),
+            code: generatedCode,
             isVerified: false
         }
         let newCode = {
             email,
-            code: generatedCode.toString()
+            code: generatedCode
         }
 
         if (isCodeForUserExists.length > 0) {
             const callUpdateCode = await updateVerificationCode(email, updatedCode);
-            console.log(callUpdateCode);
 
             if (callUpdateCode.status == 201) {
                 modalResponse = {

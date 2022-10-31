@@ -30,8 +30,8 @@ const authOptions = {
                         id: _id,
                         name: firstname + " " + lastname,
                         email,
-                        status
-                        // role: "admin",
+                        status,
+                        // role
                     };
                 }
             },

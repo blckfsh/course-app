@@ -1,79 +1,115 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
-import voucher_codes from "voucher-code-generator";
 import Layout from "../../../../components/layout";
 import Create from "../../../../components/redeem/create";
+import ModalPopup from "../../../../components/modal";
+import { 
+    getUserDetailsById, 
+    getAllStudents, 
+    generate, 
+    createRedeemCode, 
+    updateRedeemCode,
+    getRedeemByUserId
+} from "../../../api/methods/actions";
 
-export default function CreateRedeem() {
+export default function CreateRedeem({ spUser }) {
+    let modalResponse = {};
     const { status, data } = useSession();
     const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [redeemCode, setRedeemCode] = useState(" ");
     const [isExpire, isSetExpire] = useState(false);
-
-    const getDetails = async (id) => {
-        const action = await axios.get(`/api/user/id/${id}`);
-        const { firstname, lastname, email } = action.data.data[0];
-
-        setName(firstname + " " + lastname);
-        setEmail(email);
-    }
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({});
+    
+    const openModal = async () => await setModalIsOpen(true);
+    const closeModal = async () => await setModalIsOpen(false);
+    const afterOpenModal = () => console.log("after opening the modal");
 
     const isUserExisting = async () => {
-        const action = await axios.get(`/api/redeem/${router.query.id}`);
+        const action = await getRedeemByUserId(router.query.id);
 
-        isSetExpire(action.data.data[0].isExpired);
+        // console.log(action[0].isExpired);
+        isSetExpire(action[0].isExpired);
         return action;
     }
 
     const generateCode = async () => {
-        const generate = await voucher_codes.generate({
-            length: 10,
-            count: 1
-        });
-        const newCode = {
+        const generatedCode = await generate();
+        let newCode = {
             user_id: router.query.id,
-            code: generate.toString()
+            code: generatedCode
         }
-        const updateCode = {
-            code: generate.toString(),
+        let updateCode = {
+            code: generatedCode,
             isRedeemed: false,
             isExpired: false
         }
-        setRedeemCode(generate.toString());
+        setRedeemCode(generatedCode);
         
         const isExisting = await isUserExisting();
 
-        if (isExisting.data.data.length > 0) {
-            console.log("patch");
-            await axios.patch(`/api/redeem/${router.query.id}`, updateCode);                        
+        if (isExisting.length > 0) {
+            const callUpdateRedeem = await updateRedeemCode(router.query.id, updateCode)
+            if (callUpdateRedeem.status == 201) {
+                modalResponse = {
+                    title: "Redeem Code",
+                    message: "Updated Successfully"
+                }
+            }                       
         } else {
-            await axios.post("/api/redeem", newCode);
-            console.log("post");
+            const callCreateRedeem = await createRedeemCode(newCode);
+            if (callCreateRedeem.status == 201) {
+                modalResponse = {
+                    title: "Redeem Code",
+                    message: "Created Successfully"
+                }                
+            }  
         }
-        await isUserExisting();  
+        await isUserExisting();
+        await setModalContent(modalResponse);
+        await openModal();
     }
 
     const disableCode = async () => {
         const isExisting = await isUserExisting();
 
-        if (isExisting.data.data.length > 0) {
+        if (isExisting.length > 0) {
             const updateToExpired = {
-                isExpired: !isExisting.data.data[0].isExpired
+                isExpired: !isExisting[0].isExpired
             }
 
-            await axios.patch(`/api/redeem/${router.query.id}`, updateToExpired);
+            const callUpdateRedeem = await updateRedeemCode(router.query.id, updateToExpired);
+            if (callUpdateRedeem.status == 201) {
+                modalResponse = {
+                    title: "Redeem Code",
+                    message: "Redeem code was set to expired."
+                }
+            } else {
+                modalResponse = {
+                    title: "Redeem Code",
+                    message: "Redeem code was set to expired failed."
+                }
+            }
             await isUserExisting();
+        } else {
+            modalResponse = {
+                title: "Redeem Code",
+                message: "The code is not associated to your account."
+            }
         }
+
+        setModalContent(modalResponse);
+        openModal();
     }
 
     useEffect(() => {
         if (status === "unauthenticated") router.replace("/signin");
         if (status === "authenticated") {
-          getDetails(router.query.id)
+          setName(spUser[0].name);
+          setEmail(spUser[0].email);
         }
       }, [status]);
 
@@ -88,6 +124,37 @@ export default function CreateRedeem() {
                 disableCode={disableCode} 
                 isExpire={isExpire} 
             />
+            <ModalPopup 
+                isOpen={modalIsOpen}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}
+                modalContent={modalContent}
+            />
         </div>
     )
+}
+
+export async function getStaticPaths() {
+    const data = await getAllStudents();
+
+    return {
+        fallback: false,
+        paths: data.map(student => ({
+            params: { id: student._id.toString() },
+        })),
+    }
+}
+
+export async function getStaticProps(context) {
+    let tempUser = [];
+    const id = context.params.id;
+    const user = await getUserDetailsById(id);
+    const { firstname, lastname, email } = user;
+
+    tempUser.push({ name: firstname + " " + lastname, email });
+    return {
+        props: {
+            spUser: tempUser
+        }
+    }
 }

@@ -191,7 +191,7 @@ export default function Register(props) {
                                 </form> : ""
                         }
                         <div className="mt-2 flex justify-center">
-                            <Link href="/">
+                            <Link href="/signin">
                                 <a className="flex w-full justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
                                     Go To Login
                                 </a>

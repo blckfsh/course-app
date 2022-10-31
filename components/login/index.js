@@ -3,20 +3,24 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-export default function Login() {
+export default function Login(props) {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const router = useRouter();
 
     const onSubmit = async (data) => {
-        // console.log(data);
-
         const res = await signIn("credentials", {
             email: data.email,
             password: data.password,
             redirect: false,
         });
 
-        if (res.status == 200) router.replace("/");
+        
+
+        if (res.status == 200) {
+            router.replace("/");
+        } else {
+            props.errorMessage();
+        }
     }
 
     return (
@@ -94,7 +98,7 @@ export default function Login() {
                         </form>
                     </div>
                 </div>
-            </div>
+            </div>            
         </div>
     )
 }
