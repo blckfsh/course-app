@@ -107,7 +107,7 @@ export default function Forgot() {
                 setModalContent(modalResponse);
                 openModal();
                 setTimeout(() => {
-                    router.replace("/signin");
+                    router.replace("/");
                 }, 3000);
             } else {
                 modalResponse = {

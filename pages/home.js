@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/layout";
@@ -9,11 +9,13 @@ import ModalPopup from "../components/modal";
 import { getUserByEmail, getAllStudents, getRedeemByUserId, updateRedeemCode } from "./api/methods/actions";
 
 export default function Home({ spStudents }) {
+  let modalResponse = {};
   const { status, data } = useSession();
   const router = useRouter();
   const [role, setRole] = useState("");
   const [code, setCode] = useState("");
   const [students, setStudents] = useState([]);
+  const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState({});
 
@@ -34,23 +36,24 @@ export default function Home({ spStudents }) {
 
   /* ==================== STUDENT SECTION ==================== */
   const isEmailExisting = async () => {
-    const action = await getUserByEmail(data.user.email);
+    const action = await getUserByEmail(data.user.email);    
     return action.data.data[0]._id.toString();
   }
 
   const isUserExisting = async () => {
     const id = await isEmailExisting();
     const callGetRedeemCode = await getRedeemByUserId(id);
+    setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
     return callGetRedeemCode;
   }
 
   const verifyRedeemCode = async (code) => {
     const isExisting = await isUserExisting();
 
-    if (isExisting.data.data.length) {
-      let userId = isExisting.data.data[0].user_id;
-      let correctCode = isExisting.data.data[0].code;
-      let isRedeemed = isExisting.data.data[0].isRedeemed;
+    if (isExisting.length) {
+      let userId = isExisting[0].user_id;
+      let correctCode = isExisting[0].code;
+      let isRedeemed = isExisting[0].isRedeemed;
       let updateToRedeemed = {
         isRedeemed: true
       }
@@ -58,6 +61,8 @@ export default function Home({ spStudents }) {
       if (correctCode == code) {
         if (isRedeemed == false) {
           await updateRedeemCode(userId, updateToRedeemed);
+          await setIsCodeRedeemed(true);
+
           modalResponse = {
             title: "Redeem Code",
             message: "You have now access with the course."
@@ -80,12 +85,17 @@ export default function Home({ spStudents }) {
   }
   /* ==================== STUDENT SECTION ==================== */
 
+  const onSignOutHandler = async () => {
+    await signOut();
+  }
+
   useEffect(() => {
     try {
       if (status === "unauthenticated") router.replace("/");
       if (status === "authenticated") {
         getRole(data.user.email);
         setStudents(spStudents);
+        isUserExisting();
       }
     } catch(error) {
       console.log(error);
@@ -95,7 +105,7 @@ export default function Home({ spStudents }) {
   if (status === "authenticated") {
     return (
       <div>
-        <Layout />
+        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?
