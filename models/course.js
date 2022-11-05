@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); // importing mongoose
 
 // Create a Schema
-const TrainingSchema = mongoose.Schema({
+const CourseSchema = mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -10,7 +10,14 @@ const TrainingSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    modules: [
+    trainings: [
+        {
+            name: { type: String, required: true },
+            desc: { type: String, required: true },
+            path: { type: String, required: true }
+        }
+    ], 
+    labs: [
         {
             name: { type: String, required: true },
             desc: { type: String, required: true },
@@ -24,4 +31,4 @@ const TrainingSchema = mongoose.Schema({
 })
 
 // export model
-module.exports = mongoose.models.Training || mongoose.model('Training', TrainingSchema);
+module.exports = mongoose.models.Course || mongoose.model('Course', CourseSchema);

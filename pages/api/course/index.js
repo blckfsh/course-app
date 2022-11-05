@@ -1,5 +1,5 @@
 import connect from '../../../utils/connect';
-import Training from '../../../models/training';
+import Course from '../../../models/course';
 
 connect();
 
@@ -9,9 +9,9 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const trainings = await Training.find({});
+                const courses = await Course.find({});
 
-                res.status(200).json({ success: true, data: trainings })
+                res.status(200).json({ success: true, data: courses })
             } catch (error) {
                 res.status(400).json({ success: false });
             }

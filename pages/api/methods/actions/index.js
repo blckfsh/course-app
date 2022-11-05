@@ -81,7 +81,12 @@ export const getUserDetailsById = async (id) => {
     if (action.data.data.length > 0) return action.data.data[0];
 }
 
-export const getTrainings = async () => {
-    const action = await axios.get("http://localhost:3000/api/training");
+export const getCourses = async () => {
+    const action = await axios.get("http://localhost:3000/api/course");
+    return action;
+}
+
+export const getCertsByEmail = async (email) => {
+    const action = await axios.get(`http://localhost:3000/api/certificate/${email}`);
     return action;
 }

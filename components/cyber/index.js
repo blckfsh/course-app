@@ -1,4 +1,4 @@
-export default function TrainingComp(props) {
+export default function CyberComp(props) {
     const { title, description } = props.courses
     return (
         <div>
@@ -22,8 +22,8 @@ export default function TrainingComp(props) {
             </div>            
             <div>
                 {
-                    props.courses.trainings ?
-                    props.courses.trainings.map((module, index) => {
+                    props.courses.labs ?
+                    props.courses.labs.map((module, index) => {
                         
                         return <div key={index} className="flex w-3/4 mx-auto mt-2 border-2 p-2">
                             <div className="flex-1">
