@@ -1,6 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import moment from "moment";
 import Layout from "../../components/layout";
 import CertificateComp from "../../components/certificate";
 import { getCertsByEmail } from "../api/methods/actions";
@@ -33,7 +34,7 @@ export default function Certificate() {
         return (
             <>
                 <Layout onSignOutHandler={onSignOutHandler} />
-                <CertificateComp name={data.user.name} certs={certs} />
+                <CertificateComp name={data.user.name} certs={certs} />                           
             </>
         )
     }

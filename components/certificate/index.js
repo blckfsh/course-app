@@ -1,3 +1,4 @@
+import Link from "next/link";
 import moment from "moment";
 
 export default function CertificateComp(props) {
@@ -27,7 +28,9 @@ export default function CertificateComp(props) {
                     props.certs.map((cert, index) => {
                         return <div key={index} className="flex w-3/4 mx-auto mt-2 border-2 p-2">
                             <div className="flex-1 text-center">
-                                <p className="text-lg text-blue-700 cursor-pointer">{cert.cert_title}</p>                                
+                                <Link href={`/certificate/${cert._id}`}>
+                                    <a className="text-lg text-blue-700 cursor-pointer">{cert.cert_title}</a>                                
+                                </Link>                                
                             </div>
                             <div className="flex-1 text-center">
                                 <p className="text-lg">{moment(cert.awardedOn).format("MMM Do YY")}</p>

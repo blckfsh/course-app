@@ -86,7 +86,22 @@ export const getCourses = async () => {
     return action;
 }
 
+export const getCourseById = async (id) => {
+    const action = await axios.get(`http://localhost:3000/api/course/${id}`);
+    return action;
+}
+
+export const getCertificates = async () => {
+    const action = await axios.get(`http://localhost:3000/api/certificate`);
+    return action.data.data;
+}
+
 export const getCertsByEmail = async (email) => {
     const action = await axios.get(`http://localhost:3000/api/certificate/${email}`);
+    return action;
+}
+
+export const getCertificateById = async (id) => {
+    const action = await axios.get(`http://localhost:3000/api/certificate/id/${id}`);
     return action;
 }
