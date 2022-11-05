@@ -10,23 +10,16 @@ const TrainingSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    contents: [{
-        title: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            required: true
-        },
-        dest: {
-            type: String,
-            required: true
+    modules: [
+        {
+            name: { type: String, required: true },
+            desc: { type: String, required: true },
+            path: { type: String, required: true }
         }
-    }],
-    status: {
+    ], 
+    isActive: {
         type: Boolean,
-        default: false
+        required: true
     }
 })
 

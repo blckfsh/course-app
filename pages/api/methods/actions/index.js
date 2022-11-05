@@ -80,3 +80,8 @@ export const getUserDetailsById = async (id) => {
     const action = await axios.get(`http://localhost:3000/api/user/id/${id}`);
     if (action.data.data.length > 0) return action.data.data[0];
 }
+
+export const getTrainings = async () => {
+    const action = await axios.get("http://localhost:3000/api/training");
+    return action;
+}

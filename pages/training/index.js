@@ -1,13 +1,14 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+// import { promises as fs } from "fs";
+import path from "path";
 import Layout from "../../components/layout";
 import TrainingComp from "../../components/training";
-import { promises as fs } from "fs";
-import path from "path";
+import { getTrainings } from "../api/methods/actions";
 
 export default function Training({ trainings }) {
-    const { status, data } = useSession();
+    const { status } = useSession();
     const router = useRouter();
 
     const onSignOutHandler = async () => {
@@ -17,7 +18,7 @@ export default function Training({ trainings }) {
     useEffect(() => {
         try {
           if (status === "unauthenticated") router.replace("/");
-          console.log(trainings);   
+                   
         } catch(error) {
           console.log(error);
         }
@@ -28,7 +29,7 @@ export default function Training({ trainings }) {
         return (
             <>
                 <Layout onSignOutHandler={onSignOutHandler} />
-                <TrainingComp />
+                <TrainingComp trainings={trainings} />
             </>
         )
     }
@@ -37,22 +38,26 @@ export default function Training({ trainings }) {
 }
 
 export async function getStaticProps() {
-  const trainingDirectory = path.join(process.cwd(), 'module');
-  const filenames = await fs.readdir(trainingDirectory);
+  const action = await getTrainings();
+  const trainings = await action.data.data[0];
+  // const dest = await action.data.data[0].dest;
 
-  const trainings = filenames.map(async (filename) => {
-    const filePath = path.join(trainingDirectory, filename);
-    const fileContents = await fs.readFile(filePath, 'utf8');
+  // const trainingDirectory = path.join(process.cwd(), dest);
+  // const filenames = await fs.readdir(trainingDirectory);
 
-    return {
-      filename,
-      content: fileContents,
-    }
-  })
+  // const modules = filenames.map(async (filename) => {
+  //   const filePath = path.join(trainingDirectory, filename);
+
+  //   return {
+  //     filename,
+  //     path: filePath,
+  //   }
+  // })
 
   return {
     props: {
-      trainings: await Promise.all(trainings),
+      trainings: trainings,
+      // modules: await Promise.all(modules),
     },
   }
 }
