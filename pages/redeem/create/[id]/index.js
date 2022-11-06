@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
 import Create from "../../../../components/redeem/create";
 import ModalPopup from "../../../../components/modal";
-import { 
-    getUserDetailsById, 
-    getAllStudents, 
-    generate, 
-    createRedeemCode, 
+import {
+    getUserDetailsById,
+    getAllStudents,
+    generate,
+    createRedeemCode,
     updateRedeemCode,
     getRedeemByUserId
 } from "../../../api/methods/actions";
@@ -23,7 +23,7 @@ export default function CreateRedeem({ spUser }) {
     const [isExpire, isSetExpire] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
-    
+
     const openModal = async () => await setModalIsOpen(true);
     const closeModal = async () => await setModalIsOpen(false);
     const afterOpenModal = () => console.log("after opening the modal");
@@ -32,7 +32,7 @@ export default function CreateRedeem({ spUser }) {
         const action = await getRedeemByUserId(router.query.id);
 
         // console.log(action[0].isExpired);
-        isSetExpire(action[0].isExpired);
+        if (action.length > 0) isSetExpire(action[0].isExpired);
         return action;
     }
 
@@ -48,7 +48,7 @@ export default function CreateRedeem({ spUser }) {
             isExpired: false
         }
         setRedeemCode(generatedCode);
-        
+
         const isExisting = await isUserExisting();
 
         if (isExisting.length > 0) {
@@ -58,15 +58,15 @@ export default function CreateRedeem({ spUser }) {
                     title: "Redeem Code",
                     message: "Updated Successfully"
                 }
-            }                       
+            }
         } else {
             const callCreateRedeem = await createRedeemCode(newCode);
             if (callCreateRedeem.status == 201) {
                 modalResponse = {
                     title: "Redeem Code",
                     message: "Created Successfully"
-                }                
-            }  
+                }
+            }
         }
         await isUserExisting();
         await setModalContent(modalResponse);
@@ -105,26 +105,30 @@ export default function CreateRedeem({ spUser }) {
         openModal();
     }
 
+    const onSignOutHandler = async () => {
+        await signOut();
+    }
+
     useEffect(() => {
         if (status === "unauthenticated") router.replace("/signin");
         if (status === "authenticated") {
-          setName(spUser[0].name);
-          setEmail(spUser[0].email);
+            setName(spUser[0].name);
+            setEmail(spUser[0].email);
         }
-      }, [status]);
+    }, [status]);
 
     return (
         <div>
             <Layout />
-            <Create 
-                name={name} 
-                email={email} 
-                redeemCode={redeemCode} 
-                generateCode={generateCode} 
-                disableCode={disableCode} 
-                isExpire={isExpire} 
+            <Create
+                name={name}
+                email={email}
+                redeemCode={redeemCode}
+                generateCode={generateCode}
+                disableCode={disableCode}
+                isExpire={isExpire}
             />
-            <ModalPopup 
+            <ModalPopup
                 isOpen={modalIsOpen}
                 onAfterOpen={afterOpenModal}
                 onRequestClose={closeModal}

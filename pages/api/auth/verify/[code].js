@@ -35,7 +35,7 @@ export default async (req, res) => {
                 }
 
                 // Disable muna
-                // await sendgrid.send(msg).catch(error => console.log(error));
+                await sendgrid.send(msg).catch(error => console.log(error));
 
                 res.status(201).json({ success: true, code })
             } catch (error) {

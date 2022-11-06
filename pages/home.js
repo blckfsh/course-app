@@ -43,7 +43,8 @@ export default function Home({ spStudents }) {
   const isUserExisting = async () => {
     const id = await isEmailExisting();
     const callGetRedeemCode = await getRedeemByUserId(id);
-    setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+
+    if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
     return callGetRedeemCode;
   }
 
