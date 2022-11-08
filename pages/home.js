@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Layout from "../components/layout";
 import Intro from "../components/dashboard/intro";
 import Redeem from "../components/dashboard/redeem";
+import Portal from "../components/dashboard/portal";
 import Students from "../components/dashboard/students";
 import ModalPopup from "../components/modal";
 import { getUserByEmail, getAllStudents, getRedeemByUserId, updateRedeemCode } from "./api/methods/actions";
@@ -110,6 +111,8 @@ export default function Home({ spStudents }) {
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?
+            isCodeRedeemed == true ? 
+            <Portal /> :
             <Redeem name={data.user.name.toString()} verifyRedeemCode={verifyRedeemCode} code={code} setCode={setCode} /> :
             <Students students={students} gotoCreateRedeemCode={gotoCreateRedeemCode} />
         }

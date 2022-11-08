@@ -3,6 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useCallback, useRef } from "react";
 import { toPng } from "html-to-image";
 import moment from "moment";
+// import fs from "fs";
 import { getCourseById, getCertificateById, getCertificates } from "../../api/methods/actions";
 
 export default function PrintCertificate({ certificates }) {
@@ -17,14 +18,14 @@ export default function PrintCertificate({ certificates }) {
 
         await toPng(ref.current, { cacheBust: true, })
             .then((dataUrl) => {
-                const link = document.createElement('a')
+                const link = document.createElement('a');                             
                 link.download = `${title}-${name}.png`;
-                link.href = dataUrl
-                link.click()
+                link.href = dataUrl;                
+                link.click();
             })
             .catch((err) => {
                 console.log(err)
-            })
+            })        
     }, [ref])
 
     useEffect(() => {
@@ -80,7 +81,7 @@ export default function PrintCertificate({ certificates }) {
                             Download
                         </a>
                     </div>
-                </div>                
+                </div>
             </div>
         )
     }
