@@ -3,90 +3,113 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useCallback, useRef } from "react";
 import { toPng } from "html-to-image";
 import moment from "moment";
-// import fs from "fs";
+import axios from "axios";
 import { getCourseById, getCertificateById, getCertificates } from "../../api/methods/actions";
+// import { printCertificate } from "../../api/methods/print";
 
 export default function PrintCertificate({ certificates }) {
     const { status } = useSession();
     const router = useRouter();
     const ref = useRef(null);
 
-    const onPrintCertificate = useCallback(async (title, name) => {
+    const onPrintCertificate = useCallback(async (id) => {
         if (ref.current === null) {
             return
         }
 
+        // await axios.get(`/api/print`);
+
+        // console.log(await pdf);
+        
+
         await toPng(ref.current, { cacheBust: true, })
-            .then((dataUrl) => {
+            .then(async (dataUrl) => {
                 const link = document.createElement('a');                             
-                link.download = `${title}-${name}.png`;
+                // link.download = `${title}-${name}.png`;
                 link.href = dataUrl;                
-                link.click();
+                // link.click();
+                // console.log(dataUrl);
+
+                const newPrint = {
+                    course_id: id,
+                    uri: dataUrl
+                }
+
+                // console.log(newPrint);
+                await axios.post("/api/print", newPrint);
+                await axios.get(`/api/print/${id}`);
+
+                // const doc = new jsPDF({
+                //     orientation: "landscape",
+                //     unit: "in",
+                //     format: [4, 2]
+                //   });
+
+                // doc.addImage(dataUrl, "PNG", 15, 40, 180, 180);
+                // doc.save("two-by-four.pdf");
+
             })
             .catch((err) => {
                 console.log(err)
-            })        
+            }) 
     }, [ref])
 
     useEffect(() => {
-        try {
-            if (status === "unauthenticated") router.replace("/");
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     if (status === "unauthenticated") router.replace("/");
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }, [])
 
-    if (status === "authenticated") {
-        return (
-            <div className="h-screen w-3/4 mx-auto">
-                <div>
-                    <div ref={ref}>
-                        <div className="bgCustom flex flex-col justify-center">
-                            <div className="flex-none p-4 text-white h-full bg-slate-900 opacity-75">
-                                <div className="flex flex-col justify-between items-center">
-                                    <div className="flex w-full mb-5">
-                                        <div className="flex-1"></div>
-                                        <div className="flex-1">
-                                            <p className="text-3xl font-bold text-center">[LOGO HERE]</p>
-                                        </div>
-                                        <div className="flex-1 text-right">
-                                            <p className="text-sm">Certification Number:</p>
-                                            <p className="text-sm font-bold">{certificates[0].id}</p>
-                                        </div>
+    return (
+        <div className="h-screen w-1/2 mx-auto">
+            <div>
+                <div ref={ref}>
+                    <div className="bgCustom flex flex-col justify-center">
+                        <div className="flex-none p-4 text-white h-full bg-slate-900 opacity-75">
+                            <div className="flex flex-col justify-between items-center">
+                                <div className="flex w-full mb-5">
+                                    <div className="flex-1"></div>
+                                    <div className="flex-1">
+                                        <p className="text-3xl font-bold text-center">[LOGO HERE]</p>
                                     </div>
-                                    <div className="my-5">
-                                        <p className="text-7xl font-bold">{certificates[0].title}</p>
+                                    <div className="flex-1 text-right">
+                                        <p className="text-sm">Certification Number:</p>
+                                        <p className="text-sm font-bold">{certificates[0].id}</p>
                                     </div>
-                                    <div className="text-center">
-                                        <p className="mb-2">This is to acknowledge that</p>
-                                        <p className="text-xl font-bold mb-2">{certificates[0].name}</p>
-                                        <p className="mb-2">has successfully completed all requirements and criteria for</p>
-                                        <p className="text-xl font-bold mb-2">{certificates[0].cert_title}</p>
-                                        <p className="mb-2">certification through examination administered by EC-Council</p>
+                                </div>
+                                <div className="my-5">
+                                    <p className="text-7xl font-bold">{certificates[0].title}</p>
+                                </div>
+                                <div className="text-center">
+                                    <p className="mb-2">This is to acknowledge that</p>
+                                    <p className="text-xl font-bold mb-2">{certificates[0].name}</p>
+                                    <p className="mb-2">has successfully completed all requirements and criteria for</p>
+                                    <p className="text-xl font-bold mb-2">{certificates[0].cert_title}</p>
+                                    <p className="mb-2">certification through examination administered by EC-Council</p>
+                                </div>
+                                <div className="flex flex-row justify-around items-center text-sm w-full mt-5">
+                                    <div className="flex-1 text-center">
+                                        <p>Issue Date: <strong>{certificates[0].awardedOn}</strong></p>
                                     </div>
-                                    <div className="flex flex-row justify-around items-center text-sm w-full mt-5">
-                                        <div className="flex-1 text-center">
-                                            <p>Issue Date: <strong>{certificates[0].awardedOn}</strong></p>
-                                        </div>
-                                        <div className="flex-1 text-center">
-                                            <p>Expiry Date: <strong>{certificates[0].expiredOn}</strong></p>
-                                        </div>
+                                    <div className="flex-1 text-center">
+                                        <p>Expiry Date: <strong>{certificates[0].expiredOn}</strong></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex justify-center mt-5">
-                        <a onClick={() => onPrintCertificate(certificates[0].title, certificates[0].name)} className="flex w-44 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
-                            Download
-                        </a>
-                    </div>
                 </div>
+                <div className="flex justify-center mt-5">
+                    <a onClick={() => onPrintCertificate(certificates[0].id)} className="flex w-44 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
+                        Download
+                    </a>
+                </div>
+                <a href="/api/print" download="generated_pdf.pdf" className="downloadBtn">Download PDF</a>
             </div>
-        )
-    }
-
-    return <div>loading</div>;
+        </div>
+    )
 }
 
 export async function getStaticPaths() {
