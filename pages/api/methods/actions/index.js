@@ -55,14 +55,14 @@ export const updateUserByEmail = async (email, user) => {
 }
 
 export const getAllStudents = async () => {
-    const action = await axios.get(`http://localhost:3000/api/user/role/student`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/user/role/student`);
     if (action.data.data.length > 0) {
         return action.data.data;
     }    
 }
 
 export const getRedeemByUserId = async (userId) => {
-    const action = await axios.get(`http://localhost:3000/api/redeem/${userId}`);    
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/redeem/${userId}`);    
     return action.data.data;
 }
 
@@ -77,31 +77,31 @@ export const createRedeemCode = async (redeem) => {
 }
 
 export const getUserDetailsById = async (id) => {
-    const action = await axios.get(`http://localhost:3000/api/user/id/${id}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/user/id/${id}`);
     if (action.data.data.length > 0) return action.data.data[0];
 }
 
 export const getCourses = async () => {
-    const action = await axios.get("http://localhost:3000/api/course");
+    const action = await axios.get("${process.env.NEXT_PUBLIC_BASE_URI}/api/course");
     return action;
 }
 
 export const getCourseById = async (id) => {
-    const action = await axios.get(`http://localhost:3000/api/course/${id}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/course/${id}`);
     return action;
 }
 
 export const getCertificates = async () => {
-    const action = await axios.get(`http://localhost:3000/api/certificate`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/certificate`);
     return action.data.data;
 }
 
 export const getCertsByEmail = async (email) => {
-    const action = await axios.get(`http://localhost:3000/api/certificate/${email}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/certificate/${email}`);
     return action;
 }
 
 export const getCertificateById = async (id) => {
-    const action = await axios.get(`http://localhost:3000/api/certificate/id/${id}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/certificate/id/${id}`);
     return action;
 }
