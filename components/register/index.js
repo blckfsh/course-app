@@ -7,7 +7,7 @@ import { encryptPassword } from "../../pages/api/methods/actions";
 
 export default function Register(props) {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [indicator, setIndicator] = useState('');
+    const [indicator, setIndicator] = useState("");
 
     const onSubmit = async (data) => {
         const { firstname, lastname, password, confirm } = data;
@@ -129,7 +129,7 @@ export default function Register(props) {
                                                 <li>Lowercase letters</li>
                                                 <li>Uppercase letters</li>
                                                 <li>Digits (0-9)</li>
-                                                <li>Special characters: @ # $ % ^ & * - _ + = [] { } | \ : ' , ? / ` ~ " () ; ! .</li>
+                                                <li>Special characters: @ # $ % ^ & * - _ + = [] { } | \ : &#39; , ? / ` ~ &#34; () ; ! .</li>
                                             </ul>
                                         </div>
                                         <div className="mt-3">

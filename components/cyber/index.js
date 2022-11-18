@@ -27,7 +27,7 @@ export default function CyberComp(props) {
                         
                         return <div key={index} className="flex w-3/4 mx-auto mt-2 border-2 p-2">
                             <div className="flex-1">
-                                <a href={`${module.path}/${module.name}`} target="_blank" className="text-lg text-blue-700 cursor-pointer">{module.name}</a>                                
+                                <a href={`${module.path}/${module.name}`} target="_blank" rel="noreferrer" className="text-lg text-blue-700 cursor-pointer">{module.name}</a>                                
                             </div>
                             <div className="flex-1">
                                 <p className="text-lg">{module.desc}</p>

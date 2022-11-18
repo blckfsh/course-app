@@ -20,6 +20,7 @@ export default function CreateRedeem({ spUser }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [redeemCode, setRedeemCode] = useState(" ");
+    const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [isExpire, isSetExpire] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
@@ -30,8 +31,10 @@ export default function CreateRedeem({ spUser }) {
 
     const isUserExisting = async () => {
         const action = await getRedeemByUserId(router.query.id);
+        const callGetRedeemCode = await getRedeemByUserId(id);
 
         // console.log(action[0].isExpired);
+        if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
         if (action.length > 0) isSetExpire(action[0].isExpired);
         return action;
     }
@@ -119,7 +122,7 @@ export default function CreateRedeem({ spUser }) {
 
     return (
         <div>
-            <Layout />
+            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
             <Create
                 name={name}
                 email={email}

@@ -1,22 +1,36 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import TrainingComp from "../../components/training";
-import { getCourses } from "../api/methods/actions";
+import { getCourses, getUserByEmail, getRedeemByUserId  } from "../api/methods/actions";
 
 export default function Training({ courses }) {
-  const { status } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
+  const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
 
   const onSignOutHandler = async () => {
     await signOut();
   }
 
+  const isEmailExisting = async () => {
+    const action = await getUserByEmail(data.user.email);
+    return action.data.data[0]._id.toString();
+  }
+
+  const isUserExisting = async () => {
+    const id = await isEmailExisting();
+    const callGetRedeemCode = await getRedeemByUserId(id);
+
+    if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+    return callGetRedeemCode;
+  }
+
   useEffect(() => {
     try {
       if (status === "unauthenticated") router.replace("/");
-
+      if (status === "authenticated") isUserExisting();
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +40,7 @@ export default function Training({ courses }) {
   if (status === "authenticated") {
     return (
       <>
-        <Layout onSignOutHandler={onSignOutHandler} />
+        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
         <TrainingComp courses={courses} />
       </>
     )
@@ -38,7 +52,7 @@ export default function Training({ courses }) {
 export async function getStaticProps() {
   const action = await getCourses();
   const courses = await action.data.data[0];
-  
+
   return {
     props: {
       courses: courses

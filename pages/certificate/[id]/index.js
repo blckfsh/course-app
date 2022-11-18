@@ -1,32 +1,31 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useCallback, useRef } from "react";
 import { toPng } from "html-to-image";
 import moment from "moment";
 import axios from "axios";
 import { getCourseById, getCertificateById, getCertificates } from "../../api/methods/actions";
-// import { printCertificate } from "../../api/methods/print";
+
 
 export default function PrintCertificate({ certificates }) {
     const { status } = useSession();
     const router = useRouter();
     const ref = useRef(null);
 
+    
+
     const onPrintCertificate = useCallback(async (id) => {
         if (ref.current === null) {
             return
         }
 
-        // await axios.get(`/api/print`);
-
-        // console.log(await pdf);
-        
 
         await toPng(ref.current, { cacheBust: true, })
             .then(async (dataUrl) => {
-                const link = document.createElement('a');                             
+                const link = document.createElement('a');
                 // link.download = `${title}-${name}.png`;
-                link.href = dataUrl;                
+                link.href = dataUrl;
                 // link.click();
                 // console.log(dataUrl);
 
@@ -35,31 +34,29 @@ export default function PrintCertificate({ certificates }) {
                     uri: dataUrl
                 }
 
-                // console.log(newPrint);
-                await axios.post("/api/print", newPrint);
-                await axios.get(`/api/print/${id}`);
+                const addPrint = await axios.post("/api/print", newPrint);
 
-                // const doc = new jsPDF({
-                //     orientation: "landscape",
-                //     unit: "in",
-                //     format: [4, 2]
-                //   });
+                if (addPrint.status == 201) {
+                    const generatePDF = await axios.get(`/api/print/${id}`);
 
-                // doc.addImage(dataUrl, "PNG", 15, 40, 180, 180);
-                // doc.save("two-by-four.pdf");
+                    if (generatePDF.status == 201) {
 
+                        await axios.delete(`/api/print/${id}`);
+                        router.replace(generatePDF.data.dest);
+                    }
+                }
             })
             .catch((err) => {
                 console.log(err)
-            }) 
+            })
     }, [ref])
 
     useEffect(() => {
-        // try {
-        //     if (status === "unauthenticated") router.replace("/");
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        try {
+            if (status === "unauthenticated") router.replace("/");            
+        } catch (error) {
+            console.log(error);
+        }
     }, [])
 
     return (
@@ -102,11 +99,15 @@ export default function PrintCertificate({ certificates }) {
                     </div>
                 </div>
                 <div className="flex justify-center mt-5">
-                    <a onClick={() => onPrintCertificate(certificates[0].id)} className="flex w-44 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
+                    <a onClick={() => onPrintCertificate(certificates[0].id)} className="flex w-44 mr-5 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
                         Download
                     </a>
+                    <Link href="/home">
+                        <a className="flex w-44 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
+                            Go Back
+                        </a>
+                    </Link>
                 </div>
-                <a href="/api/print" download="generated_pdf.pdf" className="downloadBtn">Download PDF</a>
             </div>
         </div>
     )
