@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -31,7 +31,7 @@ export default function CreateRedeem({ spUser }) {
 
     const isUserExisting = async () => {
         const action = await getRedeemByUserId(router.query.id);
-        const callGetRedeemCode = await getRedeemByUserId(id);
+        const callGetRedeemCode = await getRedeemByUserId(router.query.id);
 
         // console.log(action[0].isExpired);
         if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
@@ -113,7 +113,7 @@ export default function CreateRedeem({ spUser }) {
     }
 
     useEffect(() => {
-        if (status === "unauthenticated") router.replace("/signin");
+        if (status === "unauthenticated") router.replace("/");
         if (status === "authenticated") {
             setName(spUser[0].name);
             setEmail(spUser[0].email);
@@ -154,8 +154,8 @@ export default function CreateRedeem({ spUser }) {
 
 export async function getServerSideProps(context) {
     let tempUser = [];
-    const id = context.params.id;
-    const user = await getUserDetailsById(id);
+    const uid = context.params.id;
+    const user = await getUserDetailsById(uid);
     const { firstname, lastname, email } = user;
 
     tempUser.push({ name: firstname + " " + lastname, email });
