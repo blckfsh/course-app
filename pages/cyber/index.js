@@ -49,7 +49,7 @@ export default function Cyber({ courses }) {
     return <div>loading</div>;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const action = await getCourses();
     const courses = await action.data.data[0];
 

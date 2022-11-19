@@ -113,18 +113,18 @@ export default function PrintCertificate({ certificates }) {
     )
 }
 
-export async function getStaticPaths() {
-    const course = await getCertificates();
+// export async function getStaticPaths() {
+//     const course = await getCertificates();
 
-    return {
-        fallback: false,
-        paths: course.map(course => ({
-            params: { id: course._id.toString() },
-        })),
-    }
-}
+//     return {
+//         fallback: false,
+//         paths: course.map(course => ({
+//             params: { id: course._id.toString() },
+//         })),
+//     }
+// }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
     let tempCertificate = [];
     const certificate = await getCertificateById(context.params.id);
     const { _id, course_id, name, cert_title, awardedOn, expiredOn } = certificate.data.data[0];

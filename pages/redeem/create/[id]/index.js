@@ -141,18 +141,18 @@ export default function CreateRedeem({ spUser }) {
     )
 }
 
-export async function getStaticPaths() {
-    const data = await getAllStudents();
+// export async function getStaticPaths() {
+//     const data = await getAllStudents();
 
-    return {
-        fallback: false,
-        paths: data.map(student => ({
-            params: { id: student._id.toString() },
-        })),
-    }
-}
+//     return {
+//         fallback: false,
+//         paths: data.map(student => ({
+//             params: { id: student._id.toString() },
+//         })),
+//     }
+// }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
     let tempUser = [];
     const id = context.params.id;
     const user = await getUserDetailsById(id);

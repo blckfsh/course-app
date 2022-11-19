@@ -129,7 +129,7 @@ export default function Home({ spStudents }) {
   return <div>loading</div>;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   let tempStudents = [];
   const callGetAllStudents = await getAllStudents();
 

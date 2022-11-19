@@ -1,6 +1,8 @@
 import connect from '../../../../../utils/connect';
 import User from '../../../../../models/user';
 
+connect();
+
 export default async (req, res) => {
     const { method } = req;
 
