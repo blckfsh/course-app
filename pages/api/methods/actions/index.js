@@ -82,7 +82,7 @@ export const getUserDetailsById = async (id) => {
 }
 
 export const getCourses = async () => {
-    const action = await axios.get("${process.env.NEXT_PUBLIC_BASE_URI}/api/course");
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/course`);
     return action;
 }
 
