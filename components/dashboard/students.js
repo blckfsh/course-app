@@ -22,10 +22,10 @@ export default function Students(props) {
                                 <td>{student.isRedeemed}</td>
                                 <td>
                                     <a
-                                        onClick={() => props.gotoCreateRedeemCode(student.id)}
+                                        onClick={() => props.gotoRedeemCode(student.id)}
                                         className="cursor-pointer p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800"
                                     >
-                                        Create Code
+                                        View
                                     </a>
                                 </td>
                             </tr>

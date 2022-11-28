@@ -6,6 +6,10 @@ const RedeemSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    course_id: {
+        type: String,
+        required: true
+    },
     code: {
         type: String,
         required: true

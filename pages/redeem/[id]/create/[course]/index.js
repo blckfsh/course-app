@@ -1,17 +1,17 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Layout from "../../../../components/layout";
-import Create from "../../../../components/redeem/create";
-import ModalPopup from "../../../../components/modal";
+import Layout from "../../../../../components/layout";
+import Create from "../../../../../components/redeem/create";
+import ModalPopup from "../../../../../components/modal";
 import {
     getUserDetailsById,
     getAllStudents,
     generate,
     createRedeemCode,
     updateRedeemCode,
-    getRedeemByUserId
-} from "../../../api/methods/actions";
+    getRedeemByUserIdAndCourseId
+} from "../../../../api/methods/actions";
 
 export default function CreateRedeem({ spUser }) {
     let modalResponse = {};
@@ -30,10 +30,9 @@ export default function CreateRedeem({ spUser }) {
     const afterOpenModal = () => console.log("after opening the modal");
 
     const isUserExisting = async () => {
-        const action = await getRedeemByUserId(router.query.id);
-        const callGetRedeemCode = await getRedeemByUserId(router.query.id);
-
-        // console.log(action[0].isExpired);
+        const action = await getRedeemByUserIdAndCourseId(router.query.id, router.query.course);
+        const callGetRedeemCode = await getRedeemByUserIdAndCourseId(router.query.id, router.query.course);
+        
         if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
         if (action.length > 0) isSetExpire(action[0].isExpired);
         return action;
@@ -43,6 +42,7 @@ export default function CreateRedeem({ spUser }) {
         const generatedCode = await generate();
         let newCode = {
             user_id: router.query.id,
+            course_id: router.query.course,
             code: generatedCode
         }
         let updateCode = {
@@ -55,7 +55,7 @@ export default function CreateRedeem({ spUser }) {
         const isExisting = await isUserExisting();
 
         if (isExisting.length > 0) {
-            const callUpdateRedeem = await updateRedeemCode(router.query.id, updateCode)
+            const callUpdateRedeem = await updateRedeemCode(router.query.id, router.query.course, updateCode)
             if (callUpdateRedeem.status == 201) {
                 modalResponse = {
                     title: "Redeem Code",
@@ -84,7 +84,7 @@ export default function CreateRedeem({ spUser }) {
                 isExpired: !isExisting[0].isExpired
             }
 
-            const callUpdateRedeem = await updateRedeemCode(router.query.id, updateToExpired);
+            const callUpdateRedeem = await updateRedeemCode(router.query.id, router.query.course, updateToExpired);
             if (callUpdateRedeem.status == 201) {
                 modalResponse = {
                     title: "Redeem Code",

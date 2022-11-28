@@ -62,12 +62,17 @@ export const getAllStudents = async () => {
 }
 
 export const getRedeemByUserId = async (userId) => {
-    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/redeem/${userId}`);    
+    const action = await axios.get(`/api/redeem/${userId}`);
     return action.data.data;
 }
 
-export const updateRedeemCode = async (userId, redeem) => {
-    const action = await axios.patch(`/api/redeem/${userId}`, redeem);
+export const getRedeemByUserIdAndCourseId = async (userId, courseId) => {
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/redeem/${userId}/${courseId}`);    
+    return action.data.data;
+}
+
+export const updateRedeemCode = async (userId, courseId, redeem) => {
+    const action = await axios.patch(`/api/redeem/${userId}/${courseId}`, redeem);
     return action;
 }
 

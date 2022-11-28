@@ -42,12 +42,7 @@ export default function Navigation(props) {
                                         {navigation.map((item) => (
                                             <Link
                                                 key={item.name}
-                                                href={
-                                                    item.name == "Cyber Range" || item.name == "Training Materials" ? 
-                                                    props.isCodeRedeemed == true ?
-                                                    item.href : ""
-                                                    : item.href
-                                                }                                            
+                                                href={item.href}                                            
                                             >
                                                 <a
                                                     className={classNames(

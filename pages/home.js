@@ -7,7 +7,7 @@ import Redeem from "../components/dashboard/redeem";
 import Portal from "../components/dashboard/portal";
 import Students from "../components/dashboard/students";
 import ModalPopup from "../components/modal";
-import { getUserByEmail, getAllStudents, getRedeemByUserId, updateRedeemCode } from "./api/methods/actions";
+import { getUserByEmail, getAllStudents, updateRedeemCode, getRedeemByUserId } from "./api/methods/actions";
 
 export default function Home({ spStudents }) {
   let modalResponse = {};
@@ -25,8 +25,8 @@ export default function Home({ spStudents }) {
   const afterOpenModal = () => console.log("after opening the modal");
 
   /* ==================== ADMIN SECTION ==================== */
-  const gotoCreateRedeemCode = (id) => {
-    router.push(`/redeem/create/${id}`);
+  const gotoRedeemCode = (id) => {
+    router.push(`/redeem/${id}`);
   }
 
   const getRole = async (email) => {
@@ -37,12 +37,12 @@ export default function Home({ spStudents }) {
 
   /* ==================== STUDENT SECTION ==================== */
   const isEmailExisting = async () => {
-    const action = await getUserByEmail(data.user.email);    
+    const action = await getUserByEmail(data.user.email);
     return action.data.data[0]._id.toString();
   }
 
   const isUserExisting = async () => {
-    const id = await isEmailExisting();
+    const id = await isEmailExisting();;
     const callGetRedeemCode = await getRedeemByUserId(id);
 
     if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
@@ -52,38 +52,41 @@ export default function Home({ spStudents }) {
   const verifyRedeemCode = async (code) => {
     const isExisting = await isUserExisting();
 
-    if (isExisting.length) {
-      let userId = isExisting[0].user_id;
-      let correctCode = isExisting[0].code;
-      let isRedeemed = isExisting[0].isRedeemed;
-      let updateToRedeemed = {
-        isRedeemed: true
-      }
+    if (isExisting.length > 0) {
+      isExisting.map(async (item) => {
+        let userId = item.user_id;
+        let courseId = item.course_id;
+        let correctCode = item.code;
+        let isRedeemed = item.isRedeemed;
+        let updateToRedeemed = {
+          isRedeemed: true
+        }
 
-      if (correctCode == code) {
-        if (isRedeemed == false) {
-          await updateRedeemCode(userId, updateToRedeemed);
-          await setIsCodeRedeemed(true);
+        if (correctCode == code) {
+          if (isRedeemed == false) {
+            // send the modalResponse first to prevent no content on modal
+            modalResponse = {
+              title: "Redeem Code",
+              message: "You have now access with the course."
+            }
 
-          modalResponse = {
-            title: "Redeem Code",
-            message: "You have now access with the course."
+            await updateRedeemCode(userId, courseId, updateToRedeemed);
+          } else {
+            modalResponse = {
+              title: "Redeem Code",
+              message: "Code has been redeemed."
+            }
+          } 
+        } else {
+            modalResponse = {
+              title: "Redeem Code",
+              message: "The code is not linked with your account."
           }
         }
-      } else {
-        modalResponse = {
-          title: "Redeem Code",
-          message: "Incorrect Code."
-        }
-      }
-    } else {
-      modalResponse = {
-        title: "Redeem Code",
-        message: "The code is not linked with your account."
-      }
+      })
+      setModalContent(modalResponse);
+      openModal();
     }
-    setModalContent(modalResponse);
-    openModal();
   }
   /* ==================== STUDENT SECTION ==================== */
 
@@ -99,7 +102,7 @@ export default function Home({ spStudents }) {
         setStudents(spStudents);
         isUserExisting();
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }, [status]);
@@ -107,14 +110,14 @@ export default function Home({ spStudents }) {
   if (status === "authenticated") {
     return (
       <div>
-        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
+        <Layout onSignOutHandler={onSignOutHandler} />
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?
-            isCodeRedeemed == true ? 
-            <Portal /> :
-            <Redeem name={data.user.name.toString()} verifyRedeemCode={verifyRedeemCode} code={code} setCode={setCode} /> :
-            <Students students={students} gotoCreateRedeemCode={gotoCreateRedeemCode} />
+          isCodeRedeemed == true ?
+          <Portal /> :
+          <Redeem name={data.user.name.toString()} verifyRedeemCode={verifyRedeemCode} code={code} setCode={setCode} /> :
+            <Students students={students} gotoRedeemCode={gotoRedeemCode} />
         }
         <ModalPopup
           isOpen={modalIsOpen}
@@ -138,24 +141,33 @@ export async function getServerSideProps() {
 
     // NOTE: we use for loop because map function do not work on getInitialProps()
     for (let x = 0; x <= callGetAllStudents.length - 1; x++) {
-      let callGetRedeemByUserId = await getRedeemByUserId(callGetAllStudents[x].user_id);
-      if (callGetRedeemByUserId.length < 1) {
-        tempStudents.push({
-          id: callGetAllStudents[x]._id,
-          name: callGetAllStudents[x].firstname + " " + callGetAllStudents[x].lastname,
-          email: callGetAllStudents[x].email,
-          code: "",
-          isRedeemed: ""
-        })
-      } else {
-        tempStudents.push({
-          id: callGetAllStudents[x]._id,
-          name: callGetAllStudents[x].firstname + " " + res.lastname,
-          email: callGetAllStudents[x].email,
-          code: callGetRedeemByUserId.code,
-          isRedeemed: callGetRedeemByUserId.isRedeemed
-        })
-      }
+      // let callGetRedeemByUserId = await getRedeemByUserId(callGetAllStudents[x].user_id);
+      // if (callGetRedeemByUserId.length < 1) {
+      //   tempStudents.push({
+      //     id: callGetAllStudents[x]._id,
+      //     name: callGetAllStudents[x].firstname + " " + callGetAllStudents[x].lastname,
+      //     email: callGetAllStudents[x].email,
+      //     code: "",
+      //     isRedeemed: ""
+      //   })
+      // } else {
+      //   tempStudents.push({
+      //     id: callGetAllStudents[x]._id,
+      //     name: callGetAllStudents[x].firstname + " " + res.lastname,
+      //     email: callGetAllStudents[x].email,
+      //     code: callGetRedeemByUserId.code,
+      //     isRedeemed: callGetRedeemByUserId.isRedeemed
+      //   })
+      // }
+      // codes above we dont need
+
+      tempStudents.push({
+        id: callGetAllStudents[x]._id,
+        name: callGetAllStudents[x].firstname + " " + callGetAllStudents[x].lastname,
+        email: callGetAllStudents[x].email,
+        code: "",
+        isRedeemed: ""
+      })
     }
   }
 

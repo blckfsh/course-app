@@ -10,27 +10,13 @@ export default async (req, res) => {
         case 'GET':
             try {
                 const user_id = req.query.user_id;
-                const redeem = await Redeem.find({ user_id });
+                const redeems = await Redeem.find({ user_id });
 
-                res.status(200).json({ success: true, data: redeem })
+                res.status(200).json({ success: true, data: redeems })
             } catch (error) {
                 res.status(404).json({ success: false });
             }
-            break;
-        case 'PATCH':
-            try {
-                const user_id = req.query.user_id;
-                const findId = await Redeem.find({ user_id });
-                const id = findId[0]._id.toString();
-
-                if (!findId) return res.status(404).json({ message: "No Data Found" });
-                const updatedRedeem = await Redeem.updateOne({_id: id}, {$set: req.body});
-                res.status(201).json({ success: true, data: updatedRedeem })
-            } catch (error) {
-                console.log(error);
-                res.status(400).json({ success: false });
-            }
-            break;
+            break;        
         default:
             res.status(400).json({ success: false });
             break;
