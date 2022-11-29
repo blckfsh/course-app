@@ -11,6 +11,14 @@ const navigation = [
     { name: 'Digital Certificate', href: '/certificate', current: false }
 ]
 
+const adminNavigation = [
+    { name: 'Home', href: '/home', current: true },
+    { name: 'Manage Cyber Range', href: '/cyber', current: false },
+    { name: 'Manage Training Materials', href: '/training', current: false },
+    { name: 'Redeem Access Keys', href: '/access', current: false },
+    { name: 'Manage Digital Certificate', href: '/certificate', current: false }
+]
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -39,22 +47,41 @@ export default function Navigation(props) {
                                 </div>
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">
-                                        {navigation.map((item) => (
-                                            <Link
-                                                key={item.name}
-                                                href={item.href}                                            
-                                            >
-                                                <a
-                                                    className={classNames(
-                                                        item.current ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white',
-                                                        'px-3 py-2 rounded-md text-sm font-medium'
-                                                    )}
-                                                    aria-current={item.current ? 'page' : undefined}                                                    
+                                        {
+                                            props.role == "student" ?
+                                            navigation.map((item) => (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}                                            
                                                 >
-                                                    {item.name}
-                                                </a>
-                                            </Link>
-                                        ))}
+                                                    <a
+                                                        className={classNames(
+                                                            item.current ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+                                                            'px-3 py-2 rounded-md text-sm font-medium'
+                                                        )}
+                                                        aria-current={item.current ? 'page' : undefined}                                                    
+                                                    >
+                                                        {item.name}
+                                                    </a>
+                                                </Link>
+                                            )) : 
+                                            adminNavigation.map((item) => (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}                                            
+                                                >
+                                                    <a
+                                                        className={classNames(
+                                                            item.current ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white',
+                                                            'px-3 py-2 rounded-md text-sm font-medium'
+                                                        )}
+                                                        aria-current={item.current ? 'page' : undefined}                                                    
+                                                    >
+                                                        {item.name}
+                                                    </a>
+                                                </Link>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>

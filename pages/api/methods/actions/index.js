@@ -110,3 +110,8 @@ export const getCertificateById = async (id) => {
     const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/certificate/id/${id}`);
     return action;
 }
+
+export const updateLabById = async (id, course) => {
+    const action = await axios.patch(`/api/course/${id}`, course);
+    return action;
+}

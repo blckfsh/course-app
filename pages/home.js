@@ -110,7 +110,7 @@ export default function Home({ spStudents }) {
   if (status === "authenticated") {
     return (
       <div>
-        <Layout onSignOutHandler={onSignOutHandler} />
+        <Layout onSignOutHandler={onSignOutHandler} role={role} />
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?

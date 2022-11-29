@@ -9,6 +9,12 @@ export default function Cyber({ courses }) {
     const { status, data } = useSession();
     const router = useRouter();
     const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
+    const [role, setRole] = useState("");
+
+    const getRole = async (email) => {
+        const action = await getUserByEmail(email);
+        setRole(action.data.data[0].role);
+    }
 
     const onSignOutHandler = async () => {
         await signOut();
@@ -27,10 +33,17 @@ export default function Cyber({ courses }) {
         return callGetRedeemCode;
     }
 
+    const editCyber = (id, index) => {
+        router.replace(`/cyber/${id}/${index}`);
+    }
+
     useEffect(() => {
         try {
             if (status === "unauthenticated") router.replace("/");
-            if (status === "authenticated") isUserExisting();
+            if (status === "authenticated") {
+                isUserExisting();
+                getRole(data.user.email);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -40,8 +53,8 @@ export default function Cyber({ courses }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
-                <CyberComp courses={courses} />
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} />
+                <CyberComp courses={courses} role={role} editCyber={editCyber} />
             </>
         )
     }
@@ -51,7 +64,7 @@ export default function Cyber({ courses }) {
 
 export async function getServerSideProps() {
     const action = await getCourses();
-    const courses = await action.data.data[0];
+    const courses = await action.data.data;
 
     return {
         props: {
