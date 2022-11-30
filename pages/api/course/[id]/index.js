@@ -24,6 +24,9 @@ export default async (req, res) => {
 
                 if (!findId) return res.status(404).json({ message: "No Data Found" });
                 const updatedCourse = await Course.updateOne({ _id: id }, { $set: req.body });
+
+                console.log(updatedCourse);
+
                 res.status(201).json({ success: true, data: updatedCourse })
             } catch (error) {
                 console.log(error);

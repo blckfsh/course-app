@@ -1,15 +1,16 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getUserByEmail, getCourses } from "../api/methods/actions";
 import Layout from "../../components/layout";
-import CyberComp from "../../components/cyber";
-import { getCourses, getUserByEmail, getRedeemByUserId } from "../api/methods/actions";
+import CourseComp from "../../components/cyber/course";
 
-export default function Cyber({ courses }) {
+export default function CyberCourses({ spCourses }) {
     const { status, data } = useSession();
     const router = useRouter();
-    const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
+    // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
+    const [courses, setCourses] = useState([]);
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
@@ -20,28 +21,15 @@ export default function Cyber({ courses }) {
         await signOut();
     }
 
-    const isEmailExisting = async () => {
-        const action = await getUserByEmail(data.user.email);
-        return action.data.data[0]._id.toString();
-    }
-
-    const isUserExisting = async () => {
-        const id = await isEmailExisting();
-        const callGetRedeemCode = await getRedeemByUserId(id);
-
-        if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
-        return callGetRedeemCode;
-    }
-
-    const editCyber = (id, index) => {
-        router.replace(`/cyber/${id}/${index}`);
+    const goToCyberLab = (id) => {
+        router.push(`/cyber/${id}`);
     }
 
     useEffect(() => {
         try {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
-                isUserExisting();
+                // isUserExisting();
                 getRole(data.user.email);
             }
         } catch (error) {
@@ -49,12 +37,11 @@ export default function Cyber({ courses }) {
         }
     }, [status]);
 
-
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} />
-                <CyberComp courses={courses} role={role} editCyber={editCyber} />
+                <Layout onSignOutHandler={onSignOutHandler} role={role} />
+                <CourseComp spCourses={spCourses} goToCyberLab={goToCyberLab} />
             </>
         )
     }
@@ -62,13 +49,23 @@ export default function Cyber({ courses }) {
     return <div>loading</div>;
 }
 
-export async function getServerSideProps() {
-    const action = await getCourses();
-    const courses = await action.data.data;
+export async function getServerSideProps(context) {
+    let tempCourses = [{}];
+    const action1 = await getCourses();
 
+    if (action1.data.data.length > 0) {
+        tempCourses.pop();
+        for (let x = 0; x <= parseInt(action1.data.data.length) - 1; x++) {
+            tempCourses.push({
+                id: action1.data.data[x]._id,
+                title: action1.data.data[x].title
+            })
+        }        
+    }
+    
     return {
         props: {
-            courses: courses
-        },
+            spCourses: tempCourses,
+        }
     }
 }

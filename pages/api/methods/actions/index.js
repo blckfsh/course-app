@@ -115,3 +115,8 @@ export const updateLabById = async (id, course) => {
     const action = await axios.patch(`/api/course/${id}`, course);
     return action;
 }
+
+export const updateTrainingById = async (id, course) => {
+    const action = await axios.patch(`/api/course/${id}`, course);
+    return action;
+}

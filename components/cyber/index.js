@@ -1,5 +1,5 @@
 export default function CyberComp(props) {
-    const { title, description } = props.courses
+    const { title, description } = props.courses[0];
     return (
         <div>
             <div className="bg-zinc-700">
