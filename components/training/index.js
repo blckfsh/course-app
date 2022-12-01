@@ -28,8 +28,8 @@ export default function TrainingComp(props) {
             </div>
             <div>
                 {
-                    props.courses.trainings ?
-                        props.courses.trains.map((module, index) => {
+                    props.courses.mods ?
+                        props.courses.mods.map((module, index) => {
 
                             return <div key={index} className="flex w-3/4 mx-auto mt-2 border-2 p-2 text-center">
                                 <div className="flex-1">
@@ -41,7 +41,7 @@ export default function TrainingComp(props) {
                                 {
                                     props.role == "admin" ?
                                         <div className="flex-1">
-                                            <a onClick={() => props.editTraining(module._id, index)} className="px-3 py-1 bg-cyan-700 text-white rounded-full cursor-pointer">Edit</a>
+                                            <a onClick={() => props.editTraining(props.courses._id, index)} className="px-3 py-1 bg-cyan-700 text-white rounded-full cursor-pointer">Edit</a>
                                         </div> : ""
                                 }
                             </div>

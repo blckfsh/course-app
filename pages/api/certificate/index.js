@@ -9,7 +9,7 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const certificates = await Certificate.find({});
+                const certificates = await Certificate.find();
 
                 res.status(200).json({ success: true, data: certificates })
             } catch (error) {

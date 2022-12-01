@@ -46,7 +46,7 @@ export default function EditTraining({ course }) {
         console.log(counter);
         console.log(training);
 
-        course.data.data[0].trains.map((item, index) => {
+        course.data.data[0].mods.map((item, index) => {
             if (index == counter) {
                 updateTrainings.push(training);   
             } else {
@@ -58,8 +58,7 @@ export default function EditTraining({ course }) {
             }            
         })
 
-        // ERROR FOUND: Replace the `trains` to `mods`
-        const action = await updateTrainingById(id, {trains: updateTrainings});
+        const action = await updateTrainingById(id, {mods: updateTrainings});
         console.log(action);
     }
 
@@ -69,9 +68,9 @@ export default function EditTraining({ course }) {
             if (status === "authenticated") {
                 isUserExisting();
                 getRole(data.user.email);     
-                setName(course[0].trains[router.query.counter].name);
-                setDesc(course[0].trains[router.query.counter].desc);
-                setPath(course[0].trains[router.query.counter].path);     
+                setName(course[0].mods[router.query.counter].name);
+                setDesc(course[0].mods[router.query.counter].desc);
+                setPath(course[0].mods[router.query.counter].path);     
             }
         } catch (error) {
             console.log(error);

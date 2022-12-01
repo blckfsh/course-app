@@ -27,7 +27,7 @@ export default function Training({ courses }) {
         return callGetRedeemCode;
     }
 
-    const gotoTraining = async (id) => {
+    const gotoTraining = async (id) => {      
         router.push(`/training/${id}`);
     }
 

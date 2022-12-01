@@ -9,14 +9,7 @@ const CourseSchema = mongoose.Schema({
     description: {
         type: String,
         required: true
-    },
-    trainings: [
-        {
-            name: { type: String, required: true },
-            desc: { type: String, required: true },
-            path: { type: String, required: true }
-        }
-    ], 
+    },     
     labs: [
         {
             name: { type: String, required: true },
@@ -25,6 +18,13 @@ const CourseSchema = mongoose.Schema({
             date: { type: String, required: true }
         }
     ], 
+    mods: [
+        {
+            name: { type: String, required: true },
+            desc: { type: String, required: true },
+            path: { type: String, required: true }
+        }
+    ],
     isActive: {
         type: Boolean,
         required: true

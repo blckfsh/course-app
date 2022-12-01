@@ -15,7 +15,6 @@ const adminNavigation = [
     { name: 'Home', href: '/home', current: true },
     { name: 'Manage Cyber Range', href: '/cyber', current: false },
     { name: 'Manage Training Materials', href: '/training', current: false },
-    { name: 'Redeem Access Keys', href: '/access', current: false },
     { name: 'Manage Digital Certificate', href: '/certificate', current: false }
 ]
 

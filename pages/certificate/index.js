@@ -4,13 +4,20 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import Layout from "../../components/layout";
 import CertificateComp from "../../components/certificate";
-import { getCertsByEmail, getUserByEmail, getRedeemByUserId } from "../api/methods/actions";
+import AdminCertificates from "../../components/certificate/admin";
+import { getCertificates, getCertsByEmail, getUserByEmail, getRedeemByUserId } from "../api/methods/actions";
 
-export default function Certificate() {
+export default function Certificate({ certificates }) {
     const { status, data } = useSession();
     const router = useRouter();
     const [certs, setCerts] = useState([{}]);
+    const [role, setRole] = useState("");
     const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
+
+    const getRole = async (email) => {
+        const action = await getUserByEmail(email);
+        setRole(action.data.data[0].role);
+    }
 
     const onSignOutHandler = async () => {
         await signOut();
@@ -29,7 +36,7 @@ export default function Certificate() {
         return callGetRedeemCode;
     }
 
-    const getCertificates = async (email) => {
+    const getCertificatesViaEmail = async (email) => {
         const action = await getCertsByEmail(email);
         setCerts(action.data.data);
     }
@@ -38,7 +45,8 @@ export default function Certificate() {
         try {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
-                getCertificates(data.user.email);
+                getCertificatesViaEmail(data.user.email);
+                getRole(data.user.email);
                 isUserExisting();
             }
         } catch (error) {
@@ -51,10 +59,24 @@ export default function Certificate() {
         return (
             <>
                 <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
-                <CertificateComp name={data.user.name} certs={certs} />                           
+                {
+                    role == "admin" ?
+                    <AdminCertificates certificates={certificates} /> : 
+                    <CertificateComp name={data.user.name} certs={certs} />
+                }
             </>
         )
     }
 
     return <div>loading</div>;
+}
+
+export async function getServerSideProps() {
+    const certificates = await getCertificates();
+
+    return {
+        props: {
+            certificates: certificates,
+        }
+    }
 }

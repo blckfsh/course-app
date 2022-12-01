@@ -53,7 +53,7 @@ export default function Training({ courses }) {
   if (status === "authenticated") {
     return (
       <>
-        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
+        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} />
         <TrainingComp courses={courses} role={role} editTraining={editTraining} />
       </>
     )
