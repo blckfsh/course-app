@@ -42,7 +42,7 @@ export default function PrintCertificate({ certificates }) {
                     if (generatePDF.status == 201) {
 
                         await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print/${id}`);
-                        // router.replace(generatePDF.data.dest);
+                        router.replace(generatePDF.data.dest);
                     }
                 }
             })

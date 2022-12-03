@@ -24,10 +24,10 @@ export default async (req, res) => {
                 toFile(print[0].uri).then(file => {
                     // console.log(file.mimeType, file.data, file.extension);                    
                     doc.addImage(`${file.data}.${file.extension}`, "PNG", 1, 1, 10, 6);
-                    doc.save(`./public/certificates/${pdfName}.pdf`);
+                    doc.save(`${process.env.NEXT_PUBLIC_BASE_URI}/certificates/${pdfName}.pdf`);
                 });
 
-                res.status(201).json({ success: true, dest: `/certificates/${pdfName}.pdf` })
+                res.status(201).json({ success: true, dest: `${process.env.NEXT_PUBLIC_BASE_URI}/certificates/${pdfName}.pdf` })
             } catch (error) {
                 res.status(400).json({ success: false });
             }
