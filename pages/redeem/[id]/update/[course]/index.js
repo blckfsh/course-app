@@ -2,7 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "../../../../../components/layout";
-import Create from "../../../../../components/redeem/create";
+import Update from "../../../../../components/redeem/update";
 import ModalPopup from "../../../../../components/modal";
 import {
     getUserDetailsById,
@@ -13,7 +13,7 @@ import {
     getRedeemByUserIdAndCourseId
 } from "../../../../api/methods/actions";
 
-export default function CreateRedeem({ spUser }) {
+export default function UpdateRedeem({ spUser }) {
     let modalResponse = {};
     const { status, data } = useSession();
     const router = useRouter();
@@ -123,7 +123,7 @@ export default function CreateRedeem({ spUser }) {
     return (
         <div>
             <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
-            <Create
+            <Update
                 name={name}
                 email={email}
                 redeemCode={redeemCode}

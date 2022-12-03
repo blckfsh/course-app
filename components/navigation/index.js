@@ -2,27 +2,27 @@ import Link from "next/link";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon, Bars4Icon, UserCircleIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 
-
-const navigation = [
-    { name: 'Home', href: '/home', current: true },
-    { name: 'Cyber Range', href: '/cyber', current: false },
-    { name: 'Training Materials', href: '/training', current: false },
-    { name: 'Redeem Access Keys', href: '/access', current: false },
-    { name: 'Digital Certificate', href: '/certificate', current: false }
-]
-
-const adminNavigation = [
-    { name: 'Home', href: '/home', current: true },
-    { name: 'Manage Cyber Range', href: '/cyber', current: false },
-    { name: 'Manage Training Materials', href: '/training', current: false },
-    { name: 'Manage Digital Certificate', href: '/certificate', current: false }
-]
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Navigation(props) {
+
+    const navigation = [
+        { name: 'Home', href: '/home', current: true },
+        { name: 'Cyber Range', href: '/cyber', current: false },
+        { name: 'Training Materials', href: '/training', current: false },
+        { name: 'Redeem Access Keys', href: `/access/${props.id}`, current: false },
+        { name: 'Digital Certificate', href: '/certificate', current: false }
+    ]
+    
+    const adminNavigation = [
+        { name: 'Home', href: '/home', current: true },
+        { name: 'Manage Cyber Range', href: '/cyber', current: false },
+        { name: 'Manage Training Materials', href: '/training', current: false },
+        { name: 'Manage Digital Certificate', href: '/certificate', current: false }
+    ]
+
     return (
         <Disclosure as="nav" className="bg-slate-800">
             {({ open }) => (

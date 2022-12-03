@@ -8,12 +8,14 @@ import CourseComp from "../../components/cyber/course";
 export default function CyberCourses({ spCourses }) {
     const { status, data } = useSession();
     const router = useRouter();
+    const [id, setId] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
     const [courses, setCourses] = useState([]);
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
+        setId(action.data.data[0]._id.toString());
         setRole(action.data.data[0].role);
     }
 
@@ -40,7 +42,7 @@ export default function CyberCourses({ spCourses }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} role={role} />
+                <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
                 <CourseComp spCourses={spCourses} goToCyberLab={goToCyberLab} />
             </>
         )
@@ -49,7 +51,7 @@ export default function CyberCourses({ spCourses }) {
     return <div>loading</div>;
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     let tempCourses = [{}];
     const action1 = await getCourses();
 

@@ -40,7 +40,7 @@ export const createNewVerificationCode = async (code, object) => {
 }
 
 export const getUserByEmail = async (email) => {
-    const action = await axios.get(`/api/user/${email}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/user/${email}`);
     return action;
 }
 
@@ -62,7 +62,7 @@ export const getAllStudents = async () => {
 }
 
 export const getRedeemByUserId = async (userId) => {
-    const action = await axios.get(`/api/redeem/${userId}`);
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/redeem/${userId}`);
     return action.data.data;
 }
 

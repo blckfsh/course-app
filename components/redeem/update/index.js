@@ -1,4 +1,4 @@
-export default function Create(props) {
+export default function Update(props) {
     const onSubmitHandler = (e) => {
         e.preventDefault();
 

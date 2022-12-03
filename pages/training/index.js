@@ -8,7 +8,14 @@ import { getUserByEmail, getRedeemByUserId, getCourses } from "../api/methods/ac
 export default function Training({ courses }) {
     const { status, data } = useSession();
     const router = useRouter();
+    const [id, setId] = useState("");
+    const [role, setRole] = useState("");
     const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
+
+    const getRole = async (email) => {
+      const action = await getUserByEmail(email);
+      setRole(action.data.data[0].role);
+    }
 
     const onSignOutHandler = async () => {
         await signOut();
@@ -16,6 +23,7 @@ export default function Training({ courses }) {
 
     const isEmailExisting = async () => {
         const action = await getUserByEmail(data.user.email);
+        setId(action.data.data[0]._id.toString());
         return action.data.data[0]._id.toString();
     }
 
@@ -35,6 +43,7 @@ export default function Training({ courses }) {
         try {
           if (status === "unauthenticated") router.replace("/");
           if (status === "authenticated") {
+            getRole(data.user.email);
             isUserExisting();
           }
         } catch (error) {
@@ -46,7 +55,7 @@ export default function Training({ courses }) {
       if (status === "authenticated") {
         return (
           <>
-            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
+            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} />
             <CourseComp courses={courses} gotoTraining={gotoTraining} />
           </>
         )

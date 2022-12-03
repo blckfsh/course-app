@@ -31,13 +31,16 @@ export default function Redeem({ spCourses }) {
     //     setCourses(temp);
     // }
 
-    const gotoCreateRedeemCode = (course) => {
-        router.replace(`/redeem/${router.query.id}/create/${course}`);
+    const gotoModifyRedeemCode = (course) => {
+        router.replace(`/redeem/${router.query.id}/update/${course}`);
     }
 
     useEffect(() => {
         try {
-            if (status === "unauthenticated") router.replace("/");            
+            if (status === "unauthenticated") router.replace("/");    
+            if (status === "authenticated") {
+                // TODO
+            }        
         } catch (error) {
             console.log(error);
         }
@@ -48,7 +51,7 @@ export default function Redeem({ spCourses }) {
             <Layout
                 onSignOutHandler={onSignOutHandler}
             />
-            <RedeemComp spCourses={spCourses} gotoCreateRedeemCode={gotoCreateRedeemCode} />
+            <RedeemComp spCourses={spCourses} gotoModifyRedeemCode={gotoModifyRedeemCode} />
         </div>
     )
 }
@@ -61,12 +64,21 @@ export async function getServerSideProps(context) {
         tempCourses.pop();
         for (let x = 0; x <= parseInt(action1.data.data.length) - 1; x++) {
             let action2 = await getRedeemByUserIdAndCourseId(context.params.id, action1.data.data[x]._id);
-            tempCourses.push({
-                id: action1.data.data[x]._id,
-                title: action1.data.data[x].title,
-                code: action2[0].code,
-                isRedeemed: action2[0].isRedeemed
-            })
+            if (action2.length > 0) {
+                tempCourses.push({
+                    id: action1.data.data[x]._id,
+                    title: action1.data.data[x].title,
+                    code: action2[0].code,
+                    isRedeemed: action2[0].isRedeemed
+                })
+            } else {
+                tempCourses.push({
+                    id: action1.data.data[x]._id,
+                    title: action1.data.data[x].title,
+                    code: "",
+                    isRedeemed: ""
+                })
+            }
         }        
     }
     

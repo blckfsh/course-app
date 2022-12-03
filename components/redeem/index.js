@@ -1,4 +1,5 @@
 export default function RedeemComp(props) {
+    console.log(props.spCourses)
     return (
         <div className="mt-5 p-4 w-4/5 mx-auto bg-gray-200 border-2 border-gray-500 rounded-lg">
             <div className="flex flex-row items-center">
@@ -21,9 +22,9 @@ export default function RedeemComp(props) {
                                         <td>{course.code}</td>
                                         <td>{course.isRedeemed == true ? "Yes" : "No"}</td>
                                         <td>
-                                        <a onClick={() => props.gotoCreateRedeemCode(course._id)} className="cursor-pointer p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800">
-                                            Modify Code
-                                        </a>
+                                            <a onClick={() => props.gotoModifyRedeemCode(course.id)} className="cursor-pointer p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800">
+                                                    Modify Code
+                                                </a>                                        
                                     </td>
                                 </tr>
                                 }) : ""

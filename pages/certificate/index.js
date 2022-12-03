@@ -10,6 +10,7 @@ import { getCertificates, getCertsByEmail, getUserByEmail, getRedeemByUserId } f
 export default function Certificate({ certificates }) {
     const { status, data } = useSession();
     const router = useRouter();
+    const [id, setId] = useState("");
     const [certs, setCerts] = useState([{}]);
     const [role, setRole] = useState("");
     const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
@@ -25,6 +26,7 @@ export default function Certificate({ certificates }) {
 
     const isEmailExisting = async () => {
         const action = await getUserByEmail(data.user.email);
+        setId(action.data.data[0]._id.toString());
         return action.data.data[0]._id.toString();
     }
 
@@ -58,7 +60,7 @@ export default function Certificate({ certificates }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} id={id} role={role} />
                 {
                     role == "admin" ?
                     <AdminCertificates certificates={certificates} /> : 
