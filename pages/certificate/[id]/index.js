@@ -34,14 +34,14 @@ export default function PrintCertificate({ certificates }) {
                     uri: dataUrl
                 }
 
-                const addPrint = await axios.post("/api/print", newPrint);
+                const addPrint = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print`, newPrint);
 
                 if (addPrint.status == 201) {
-                    const generatePDF = await axios.get(`/api/print/${id}`);
+                    const generatePDF = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print/${id}`);
 
                     if (generatePDF.status == 201) {
 
-                        await axios.delete(`/api/print/${id}`);
+                        await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print/${id}`);
                         router.replace(generatePDF.data.dest);
                     }
                 }
