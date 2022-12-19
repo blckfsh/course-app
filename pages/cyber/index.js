@@ -11,7 +11,6 @@ export default function CyberCourses({ spCourses }) {
     const [id, setId] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
-    const [courses, setCourses] = useState([]);
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);

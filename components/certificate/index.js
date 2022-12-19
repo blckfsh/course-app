@@ -4,22 +4,24 @@ import moment from "moment";
 export default function CertificateComp(props) {
     return (
         <div>
-            <div className="bg-zinc-700">
-                <div className="flex flex-col w-3/4 mx-auto">
-                    <div className="flex-1 mt-5 mb-3">
-                        <p className="text-2xl text-white font-bold">{props.name}</p>
-                    </div>
-                </div>
-            </div>
             <div className="flex w-3/4 mx-auto mt-5">
                 <div className="flex-1 text-center">
                     <p className="text-lg font-bold">Certificates</p>
                 </div>
                 <div className="flex-1 text-center">
-                    <p className="text-lg font-bold">Awareded On</p>
+                    <p className="text-lg font-bold">Student Name</p>
+                </div>
+                <div className="flex-1 text-center">
+                    <p className="text-lg font-bold">Awarded On</p>
                 </div>
                 <div className="flex-1 text-center">
                     <p className="text-lg font-bold">Expiring On</p>
+                </div>
+                <div className="flex-1 text-center">
+                    <p className="text-lg font-bold">Status</p>
+                </div>
+                <div className="flex-1 text-center">
+                    <p className="text-lg font-bold">Action</p>
                 </div>
             </div>
             <div>
@@ -33,10 +35,19 @@ export default function CertificateComp(props) {
                                 </Link>                                
                             </div>
                             <div className="flex-1 text-center">
+                                <p className="text-lg">{cert.name}</p>
+                            </div>
+                            <div className="flex-1 text-center">
                                 <p className="text-lg">{moment(cert.awardedOn).format("MMM Do YY")}</p>
                             </div>
                             <div className="flex-1 text-center">
                                 <p className="text-lg">{moment(cert.expiredOn).format("MMM Do YY")}</p>
+                            </div>
+                            <div className="flex-1 text-center">
+                                <p className="text-lg">{cert.status}</p>
+                            </div>
+                            <div className="flex-1 text-center">
+                                <a onClick={() => props.goToConfirmCertificate(cert._id)}>Confirm</a>
                             </div>
                         </div>
                     })

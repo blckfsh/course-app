@@ -111,6 +111,16 @@ export const getCertificateById = async (id) => {
     return action;
 }
 
+export const requestDigitalCertificate = async (certificate) => {    
+    const action = await axios.post(`/api/certificate`, certificate);
+    return action;
+}
+
+export const updateDigitalCertificate = async (id, certificate) => {
+    const action = await axios.patch(`/api/certificate/${id}`, certificate);
+    return action;
+}
+
 export const updateLabById = async (id, course) => {
     const action = await axios.patch(`/api/course/${id}`, course);
     return action;

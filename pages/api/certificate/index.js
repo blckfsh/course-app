@@ -15,7 +15,17 @@ export default async (req, res) => {
             } catch (error) {
                 res.status(400).json({ success: false });
             }
-            break;                
+            break;    
+        case 'POST':            
+            try {
+                const cert = await Certificate.create(req.body);
+
+                res.status(201).json({ success: true, data: cert })
+            } catch (error) {
+                console.log(error);
+                res.status(400).json({ success: false });
+            }
+            break;
         default:
             res.status(400).json({ success: false });
             break;
