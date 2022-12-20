@@ -22,18 +22,16 @@ export default async (req, res) => {
                 const id = req.query.id;
                 const findId = await Certificate.find({ id });
 
-                console.log(findId);
+                if (!findId) return res.status(404).json({ message: "No Data Found" });
+                const updatedCertificate = await Certificate.updateOne({ _id: id }, { $set: req.body });
 
-                // if (!findId) return res.status(404).json({ message: "No Data Found" });
-                // const updatedCertificate = await Certificate.updateOne({ _id: id }, { $set: req.body });
-
-                // res.status(201).json({ success: true, data: updatedCertificate })
+                res.status(201).json({ success: true, data: updatedCertificate })
             } catch (error) {
                 console.log(error);
                 res.status(400).json({ success: false });
             }
             break;       
-        default:
+        default:            
             res.status(400).json({ success: false });
             break;
     }

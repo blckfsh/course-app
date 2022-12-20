@@ -1,14 +1,16 @@
+import moment from "moment";
+
 export default function Confirm(props) {
     const onSubmitHandler = (e) => {
         e.preventDefault();
 
         let payload = {
-            awardedOn: props.awardedOn,
-            expiredOn: props.expiredOn,
+            awardedOn: moment(props.awardedOn).format(),
+            expiredOn: moment(props.expiredOn).format(),
             status: "CONFIRMED"
         }
 
-        console.log(payload);
+        // console.log(payload);
         props.updateDigitalCertificateById(props.certId, payload);
     }
     return (

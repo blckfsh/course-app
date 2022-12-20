@@ -47,7 +47,12 @@ export default function CertificateComp(props) {
                                 <p className="text-lg">{cert.status}</p>
                             </div>
                             <div className="flex-1 text-center">
-                                <a onClick={() => props.goToConfirmCertificate(cert._id)}>Confirm</a>
+                                <a 
+                                    className="cursor-pointer p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800"
+                                    onClick={() => props.goToConfirmCertificate(cert._id)}
+                                >
+                                    Confirm
+                                </a>
                             </div>
                         </div>
                     })

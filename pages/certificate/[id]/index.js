@@ -15,36 +15,33 @@ export default function PrintCertificate({ certificates }) {
 
     
 
-    const onPrintCertificate = useCallback(async (id) => {
+    const onPrintCertificate = useCallback(async (id, title, name) => {        
         if (ref.current === null) {
             return
         }
 
-
         await toPng(ref.current, { cacheBust: true, })
             .then(async (dataUrl) => {
                 const link = document.createElement('a');
-                // link.download = `${title}-${name}.png`;
+                link.download = `${title}-${name}.png`;
                 link.href = dataUrl;
-                // link.click();
+                link.click();
                 // console.log(dataUrl);
 
-                const newPrint = {
-                    course_id: id,
-                    uri: dataUrl
-                }
+                // const newPrint = {
+                //     course_id: id,
+                //     uri: dataUrl
+                // }
 
-                const addPrint = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print`, newPrint);
+                // const addPrint = await axios.post(`/api/print`, newPrint);
+                // if (addPrint.status == 201) {
+                //     const generatePDF = await axios.get(`/api/print/${id}`);
 
-                if (addPrint.status == 201) {
-                    const generatePDF = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print/${id}`);
-
-                    if (generatePDF.status == 201) {
-
-                        await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URI}/api/print/${id}`);
-                        // router.replace(generatePDF.data.dest);
-                    }
-                }
+                //     if (generatePDF.status == 201) {
+                //         await axios.delete(`/api/print/${id}`);
+                //         router.replace(generatePDF.data.dest);
+                //     }
+                // }
             })
             .catch((err) => {
                 console.log(err)
@@ -99,7 +96,7 @@ export default function PrintCertificate({ certificates }) {
                     </div>
                 </div>
                 <div className="flex justify-center mt-5">
-                    <a onClick={() => onPrintCertificate(certificates[0].id)} className="flex w-44 mr-5 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
+                    <a onClick={() => onPrintCertificate(certificates[0].id, certificates[0].title, certificates[0].name)} className="flex w-44 mr-5 px-5 cursor-pointer justify-center align-center py-2 text-white font-semibold text-lg bg-cyan-700 hover:bg-cyan-800">
                         Download
                     </a>
                     <Link href="/home">

@@ -117,7 +117,7 @@ export const requestDigitalCertificate = async (certificate) => {
 }
 
 export const updateDigitalCertificate = async (id, certificate) => {
-    const action = await axios.patch(`/api/certificate/${id}`, certificate);
+    const action = await axios.patch(`/api/certificate/id/${id}`, certificate);
     return action;
 }
 

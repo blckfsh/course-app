@@ -5,8 +5,10 @@ import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate,
 import Layout from "../../components/layout";
 import CourseComp from "../../components/certificate/course";
 import CertificateComp from "../../components/certificate";
+import ModalPopup from "../../components/modal";
 
 export default function CertificateCourses({ spCourses }) {
+    let modalResponse = {};
     const { status, data } = useSession();
     const router = useRouter();
     const [id, setId] = useState("");
@@ -14,6 +16,12 @@ export default function CertificateCourses({ spCourses }) {
     const [role, setRole] = useState("");
     const [certStatus, setCertStatus] = useState("");
     const [certs, setCerts] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({});
+
+    const openModal = async () => await setModalIsOpen(true);
+    const closeModal = async () => await setModalIsOpen(false);
+    const afterOpenModal = () => console.log("after opening the modal");
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
@@ -48,11 +56,21 @@ export default function CertificateCourses({ spCourses }) {
         }
         
         const action = await requestDigitalCertificate(payload);
-        if (action.data.success == true) {
-            console.log("Certificate was successfully requested");
+        if (action.status == 201) {
+            setCertStatus("PENDING");
+            modalResponse = {
+                title: "Request Certificate",
+                message: "Certificate was successfully requested"
+            }
         } else {
-            console.log("Something went wrong");
+            modalResponse = {
+                title: "Request Certificate",
+                message: "Something went wrong"
+            }
         }
+        
+        await setModalContent(modalResponse);
+        await openModal();
     }
 
     const goToConfirmCertificate = async (id) => {
@@ -82,7 +100,12 @@ export default function CertificateCourses({ spCourses }) {
                     <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} /> :
                     <CertificateComp certs={certs} goToConfirmCertificate={goToConfirmCertificate} />
                 }
-                
+                <ModalPopup
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    modalContent={modalContent}
+                />
             </>
         )
     }

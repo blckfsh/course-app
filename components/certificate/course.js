@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function CourseComp(props) {
     return (
         <div className="mt-5 p-4 w-4/5 mx-auto bg-gray-200 border-2 border-gray-500 rounded-lg">
@@ -21,9 +23,13 @@ export default function CourseComp(props) {
                                                 props.certStatus == "PENDING" ?
                                                 <a disabled={true} className="p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-slate-700">
                                                     Requested
-                                                </a> : course.status == "CONFIRMED" ?
-                                                <a>View</a> :
-                                                <a onClick={() => props.requestCertificate(course.id)} className="p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800">
+                                                </a> : props.certStatus == "CONFIRMED" ?
+                                                <Link href={`/certificate/${course.id}`}>
+                                                    <a className="p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800">
+                                                        View
+                                                    </a>
+                                                </Link> :
+                                                <a onClick={() => props.requestCertificate(course.id)} className="cursor-pointer p-1 rounded-lg mx-2 text-white text-sm font-semibold bg-cyan-700 hover:bg-cyan-800">
                                                     Request
                                                 </a>
                                             }

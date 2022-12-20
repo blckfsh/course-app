@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { getUserByEmail, updateDigitalCertificate } from "../../api/methods/actions";
 import Layout from "../../../components/layout";
 import Confirm from "../../../components/certificate/confirm";
+import ModalPopup from "../../../components/modal";
 
 export default function ConfirmCertificate({ certificate }) {
+    let modalResponse = {};
     const { status, data } = useSession();
     const router = useRouter();
     const [id, setId] = useState("");
@@ -16,6 +18,12 @@ export default function ConfirmCertificate({ certificate }) {
     const [expiredOn, setExpiredOn] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({});
+
+    const openModal = async () => await setModalIsOpen(true);
+    const closeModal = async () => await setModalIsOpen(false);
+    const afterOpenModal = () => console.log("after opening the modal");
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
@@ -32,7 +40,20 @@ export default function ConfirmCertificate({ certificate }) {
 
     const updateDigitalCertificateById = async (id, certificate) => {
         const action = await updateDigitalCertificate(id, certificate);
-        console.log(action);
+        if (action.status == 201) {
+            modalResponse = {
+                title: "Confirm Certificate",
+                message: "Certificate was successfully confirmed"
+            }
+        } else {
+            modalResponse = {
+                title: "Confirm Certificate",
+                message: "Certificate was not confirmed"
+            }
+        }
+
+        await setModalContent(modalResponse);
+        await openModal();
     }
 
     useEffect(() => {
@@ -61,6 +82,12 @@ export default function ConfirmCertificate({ certificate }) {
                     setAwardedOn={setAwardedOn}
                     setExpiredOn={setExpiredOn}
                     updateDigitalCertificateById={updateDigitalCertificateById}
+                />
+                <ModalPopup
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    modalContent={modalContent}
                 />
             </>
         )
