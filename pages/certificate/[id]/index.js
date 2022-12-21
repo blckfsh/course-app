@@ -13,8 +13,6 @@ export default function PrintCertificate({ certificates }) {
     const router = useRouter();
     const ref = useRef(null);
 
-    
-
     const onPrintCertificate = useCallback(async (id, title, name) => {        
         if (ref.current === null) {
             return

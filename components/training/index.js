@@ -12,45 +12,40 @@ export default function TrainingComp(props) {
                     </div>
                 </div>
             </div>
-            <div className="flex w-3/4 mx-auto mt-5">
-                <div className="flex-1 text-center">
-                    <p className="text-lg font-bold">Table of Contents</p>
-                </div>
-                <div className="flex-1 text-center">
-                    <p className="text-lg font-bold">Description</p>
-                </div>
-                {
-                    props.role == "admin" ?
-                        <div className="flex-1 text-center">
-                            <p className="text-lg font-bold"> </p>
-                        </div> : ""
-                }
+            <div className="flex w-3/4 mx-auto mt-5 pt-4">
+                <table className="w-full text-center">
+                    <thead>
+                        <tr>
+                            <th className="border py-2 text-xl">Table of Contents</th>
+                            <th className="border py-2 text-xl">Description</th>
+                            {
+                                props.role == "admin" ?
+                                    <th>Action</th> : ""
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            props.courses.mods ?
+                                props.courses.mods.map((module, index) => {
+
+                                    return <tr key={index}>
+                                        <td className="border py-5 text-lg">
+                                            <a href={`${module.path}/${module.name}`} target="_blank" rel="noreferrer" className="text-lg text-blue-700 cursor-pointer">{module.name}</a>
+                                        </td>
+                                        <td className="border py-5 text-lg">{module.desc}</td>
+                                        {
+                                            props.role == "admin" ?
+                                                <td className="border py-5 text-lg">
+                                                    <a onClick={() => props.editTraining(props.courses._id, index)} className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">Edit</a>
+                                                </td> : ""
+                                        }
+                                    </tr>
+                                }) : ""
+                        }
+                    </tbody>
+                </table>
             </div>
-            <div>
-                {
-                    props.courses.mods ?
-                        props.courses.mods.map((module, index) => {
-
-                            return <div key={index} className="flex w-3/4 mx-auto mt-2 border-2 p-2 text-center">
-                                <div className="flex-1">
-                                    <a href={`${module.path}/${module.name}`} target="_blank" rel="noreferrer" className="text-lg text-blue-700 cursor-pointer">{module.name}</a>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-lg">{module.desc}</p>
-                                </div>
-                                {
-                                    props.role == "admin" ?
-                                        <div className="flex-1">
-                                            <a onClick={() => props.editTraining(props.courses._id, index)} className="px-3 py-1 bg-cyan-700 text-white rounded-full cursor-pointer">Edit</a>
-                                        </div> : ""
-                                }
-                            </div>
-                        }) : ""
-                }
-            </div>
-
-
         </div>
-
     )
 }
