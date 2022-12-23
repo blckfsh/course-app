@@ -4,7 +4,7 @@ export default function Portal() {
 
     return (
         <>
-            <div className="mt-5 w-4/5 mx-auto flex flex-row text-white">
+            <div className="mt-5 w-4/5 mx-auto flex lg:flex-row flex-col text-white">
                 <div className="flex-1 p-5">
                     <Link href="training">
                         <a className="border-2 rounded-lg bg-gray-500 flex justify-center items-center h-44">

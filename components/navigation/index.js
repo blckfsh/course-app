@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon, Bars4Icon, UserCircleIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/solid";
 
@@ -42,7 +43,7 @@ export default function Navigation(props) {
                             </div>
                             <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex-shrink-0 flex items-center lg:visible md:visible invisible">
-                                    <p className="text-4xl font-bold text-white">Course App</p>
+                                    <Image src="/synx-system-logo.png" width={80} height={30} />
                                 </div>
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">

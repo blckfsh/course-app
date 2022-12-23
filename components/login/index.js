@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -14,7 +15,7 @@ export default function Login(props) {
             redirect: false,
         });
 
-        
+
 
         if (res.status == 200) {
             router.replace("/home");
@@ -25,13 +26,16 @@ export default function Login(props) {
 
     return (
         <div>
-            <div className="flex">
-                <div className="flex-none w-2/3">
-                    <div className="flex justify-center items-center bg-[url('/image1.jpg')] bg-cover h-screen">
+            <div className="flex lg:flex-row flex-col">
+                <div className="flex-none lg:w-2/3 w-full">
+                    <div className="flex justify-center items-center bg-[url('/image1.jpg')] bg-cover lg:h-screen md:py-5">
                         <div className="w-2/3 bg-cyan-500 opacity-80 rounded-2xl p-5 text-white">
-                            <strong className="text-2xl">Access all your [brandname] accounts</strong>
-                            <p className="mt-2">We have migrated to single sign-on (SSO) to unify your CompTIA accounts and products under one login!</p>
-                            <p className="mt-2 mb-5">If you do not already have a CompTIA account, please click the Sign Up Now button below.</p>
+                            <strong className="text-2xl">Access all your <strong>SYNCX</strong> accounts</strong>
+                            <p className="mt-2">Welcome to <strong>SynTechNX</strong> learning management platform (SYCNX) where you can
+                                access all your training material, simulation do assessment and receive your
+                                digital certificate.</p>
+                            <p className="mt-2 mb-5">If you do not already have <strong>SYCNX</strong> account, please sign up now
+                                button below.</p>
                             <div className="flex justify-center">
                                 <Link href="/signup">
                                     <a className="rounded-3xl border-2 border-white py-2 px-3">Sign up now</a>
@@ -40,8 +44,10 @@ export default function Login(props) {
                         </div>
                     </div>
                 </div>
-                <div className="flex-none w-1/3 flex flex-col items-center justify-center">
-                    <div>LOGO HERE</div>
+                <div className="flex-none lg:w-1/3 w-full flex flex-col items-center justify-center md:mt-5">
+                    <div>
+                        <Image src="/synx-system-logo.png" width={200} height={100} />
+                    </div>
                     <div className="mt-5">
                         <p>Dont have an account? <Link href="/signup"><a className="text-blue-800 font-semibold">Sign up now</a></Link></p>
                     </div>
@@ -98,7 +104,7 @@ export default function Login(props) {
                         </form>
                     </div>
                 </div>
-            </div>            
+            </div>
         </div>
     )
 }
