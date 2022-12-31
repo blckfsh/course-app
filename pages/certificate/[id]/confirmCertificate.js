@@ -14,6 +14,7 @@ export default function ConfirmCertificate({ certificate }) {
     const [certId, setCertId] = useState("");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [certLink, setCertLink] = useState("");
     const [awardedOn, setAwardedOn] = useState("");
     const [expiredOn, setExpiredOn] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
@@ -40,6 +41,7 @@ export default function ConfirmCertificate({ certificate }) {
 
     const updateDigitalCertificateById = async (id, certificate) => {
         const action = await updateDigitalCertificate(id, certificate);
+        console.log(action);
         if (action.status == 201) {
             modalResponse = {
                 title: "Confirm Certificate",
@@ -77,10 +79,12 @@ export default function ConfirmCertificate({ certificate }) {
                     certId={certId}
                     name={name}
                     email={email} 
+                    certLink={certLink}
                     awardedOn={awardedOn}
                     expiredOn={expiredOn}
                     setAwardedOn={setAwardedOn}
                     setExpiredOn={setExpiredOn}
+                    setCertLink={setCertLink}
                     updateDigitalCertificateById={updateDigitalCertificateById}
                 />
                 <ModalPopup

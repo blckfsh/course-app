@@ -18,6 +18,10 @@ const CertificateSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    cert_link: {
+        type: String,
+        default: "www.certificate.example.com"
+    },
     awardedOn: {
         type: Date,
         default: Date.now()

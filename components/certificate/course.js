@@ -24,11 +24,13 @@ export default function CourseComp(props) {
                                                 <a disabled={true} className="p-2 mx-2 text-white text-lg font-semibold bg-slate-700">
                                                     Requested
                                                 </a> : props.certStatus == "CONFIRMED" ?
-                                                <Link href={`/certificate/${course.id}`}>
-                                                    <a className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
-                                                        View
-                                                    </a>
-                                                </Link> :
+                                                <a 
+                                                    href={props.certLink}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
+                                                    View
+                                                </a> :
                                                 <a onClick={() => props.requestCertificate(course.id)} className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
                                                     Request
                                                 </a>

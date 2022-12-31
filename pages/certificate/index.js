@@ -14,6 +14,7 @@ export default function CertificateCourses({ spCourses }) {
     const [id, setId] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
+    const [certLink, setCertLink] = useState("");
     const [certStatus, setCertStatus] = useState("");
     const [certs, setCerts] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -42,7 +43,10 @@ export default function CertificateCourses({ spCourses }) {
 
     const getCertUsingCourseId = async (id) => {
         const isRequested = await getCertificateById(id);
-        if (isRequested.data.data.length > 0) setCertStatus(isRequested.data.data[0].status);        
+        if (isRequested.data.data.length > 0) {
+            setCertStatus(isRequested.data.data[0].status);        
+            setCertLink(isRequested.data.data[0].cert_link);
+        }
     }
 
     const requestCertificate = async () => {
@@ -97,7 +101,7 @@ export default function CertificateCourses({ spCourses }) {
                 <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
                 {
                     role === "student" ?
-                    <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} /> :
+                    <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} certLink={certLink} /> :
                     <CertificateComp certs={certs} goToConfirmCertificate={goToConfirmCertificate} />
                 }
                 <ModalPopup

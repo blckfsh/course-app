@@ -20,11 +20,7 @@ export default function CertificateComp(props) {
                         props.certs ?
                             props.certs.map((cert, index) => {
                                 return <tr key={index}>
-                                    <td className="border py-5 text-lg">
-                                        <Link href={`/certificate/${cert._id}`}>
-                                            <a className="text-lg text-blue-700 cursor-pointer">{cert.cert_title}</a>
-                                        </Link>
-                                    </td>
+                                    <td className="border py-5 text-lg">{cert.cert_title}</td>
                                     <td className="border py-5 text-lg">{cert.name}</td>
                                     <td className="border py-5 text-lg">{moment(cert.awardedOn).format("MMM Do YY")}</td>
                                     <td className="border py-5 text-lg">{moment(cert.expiredOn).format("MMM Do YY")}</td>
