@@ -32,7 +32,7 @@ export default function CyberComp(props) {
                                     return course.labs.map((module, index) => {
                                         return <tr key={index}>
                                             <td className="border py-5 text-lg">{module.date}</td>
-                                            <td className="border py-5 text-lg"><a href={`${module.path}/${module.name}`} target="_blank" rel="noreferrer" className="text-lg text-blue-700 cursor-pointer">{module.name}</a></td>
+                                            <td className="border py-5 text-lg"><a href={`${module.path}`} target="_blank" rel="noreferrer" className="text-lg text-blue-700 cursor-pointer">{module.name}</a></td>
                                             <td className="border py-5 text-lg">{module.desc}</td>
                                             {
                                                 props.role == "admin" ?
