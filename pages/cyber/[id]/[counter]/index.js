@@ -57,7 +57,7 @@ export default function EditCyber({ course }) {
         })
 
         const action = await updateLabById(id, {labs: updateLabs});
-        console.log(action);
+        if (action.status === 201) router.replace("/home");
     }
 
     useEffect(() => {

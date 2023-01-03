@@ -59,7 +59,7 @@ export default function EditTraining({ course }) {
         })
 
         const action = await updateTrainingById(id, {mods: updateTrainings});
-        console.log(action);
+        if (action.status === 201) router.replace("/home");
     }
 
     useEffect(() => {
