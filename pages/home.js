@@ -67,8 +67,7 @@ export default function Home({ spStudents }) {
         {
           role == "student" ?
           isCodeRedeemed == true ?
-          <Portal /> : <p>We are loading your content</p> 
-          : ""
+          <Portal /> : <p>We are loading your content</p> : ""
         }     
         {
           role == "admin" ? 

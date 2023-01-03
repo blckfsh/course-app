@@ -35,8 +35,8 @@ export default function Cyber({ courses }) {
         setIsPageReady(false);
         if (callGetRedeemCode.length > 0) {
             setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
-            setIsPageReady(true);
         }
+        setIsPageReady(true); // for admin to see the management view
         return callGetRedeemCode;
     }
 
