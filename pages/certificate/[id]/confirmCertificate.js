@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getUserByEmail, updateDigitalCertificate } from "../../api/methods/actions";
+import { getUserByEmail, updateDigitalCertificate, getCertificateById } from "../../api/methods/actions";
 import Layout from "../../../components/layout";
 import Confirm from "../../../components/certificate/confirm";
 import ModalPopup from "../../../components/modal";
@@ -29,14 +29,21 @@ export default function ConfirmCertificate({ certificate }) {
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
         setId(action.data.data[0]._id.toString());
-        setRole(action.data.data[0].role);
-        setName(action.data.data[0].firstname + " " + action.data.data[0].lastname);
-        setEmail(action.data.data[0].email);
+        setRole(action.data.data[0].role);        
         return action.data.data[0];
     }
 
     const onSignOutHandler = async () => {
         await signOut();
+    }
+
+    const getStudentDetailsByCertId = async (id) => {
+        const action = await getCertificateById(id);
+        
+        if (action.data.data) {
+            setName(action.data.data[0].name);
+            setEmail(action.data.data[0].email);
+        }
     }
 
     const updateDigitalCertificateById = async (id, certificate) => {
@@ -64,7 +71,8 @@ export default function ConfirmCertificate({ certificate }) {
             if (status === "authenticated") {
                 // isUserExisting();
                 getRole(data.user.email);  
-                setCertId(router.query.id);              
+                setCertId(router.query.id);   
+                getStudentDetailsByCertId(router.query.id);           
             }
         } catch (error) {
             console.log(error);

@@ -38,6 +38,7 @@ export default function CertificateCourses({ spCourses }) {
 
     const getAllCertificates = async () => {
         const action = await getCertificates();
+        console.log(action);
         setCerts(action);
     }
 
