@@ -77,9 +77,14 @@ export default function Cyber({ courses }) {
                 }
             </>
         )
+    } else {
+        return (
+            <>
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
+                <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
+            </>
+        )
     }
-
-    return <div>loading</div>;
 }
 
 export async function getServerSideProps(context) {
