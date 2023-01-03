@@ -67,9 +67,13 @@ export default function Home({ spStudents }) {
         {
           role == "student" ?
           isCodeRedeemed == true ?
-          <Portal /> : "" :
-          <Students students={students} gotoRedeemCode={gotoRedeemCode} />
-        }        
+          <Portal /> : <p>You do not have courses yet</p> 
+          : ""
+        }     
+        {
+          role == "admin" ? 
+          <Students students={students} gotoRedeemCode={gotoRedeemCode} /> : ""
+        }   
       </div>
     );
   }
