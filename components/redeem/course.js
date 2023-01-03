@@ -36,7 +36,11 @@ export default function CoursesComp(props) {
                                             }                                            
                                         </td>
                                     </tr>
-                                }) : ""
+                                }) : <tr>
+                                    <td colSpan={5} className="border py-5 text-lg">
+                                        Loading Contents...
+                                    </td>
+                                </tr>
                             }
                             
                         </tbody>
