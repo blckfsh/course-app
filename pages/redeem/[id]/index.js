@@ -8,7 +8,7 @@ import { getUserByEmail, getRedeemByUserId, getCourses, getRedeemByUserIdAndCour
 export default function Redeem({ spCourses }) {
     const router = useRouter();
     const { status, data } = useSession();
-    const [courses, setCourses] = useState([]);
+    const [isPageReady, setIsPageReady] = useState(false);
 
     const onSignOutHandler = async () => {
         await signOut();
@@ -37,23 +37,31 @@ export default function Redeem({ spCourses }) {
 
     useEffect(() => {
         try {
-            if (status === "unauthenticated") router.replace("/");    
+            if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
-                // TODO
-            }        
+                setIsPageReady(true);
+            }
         } catch (error) {
             console.log(error);
         }
     }, [status]);
 
-    return (
-        <div>
-            <Layout
-                onSignOutHandler={onSignOutHandler}
-            />
-            <RedeemComp spCourses={spCourses} gotoModifyRedeemCode={gotoModifyRedeemCode} />
-        </div>
-    )
+    if (isPageReady === true) {
+        return (
+            <div>
+                <Layout onSignOutHandler={onSignOutHandler} />
+                <RedeemComp spCourses={spCourses} gotoModifyRedeemCode={gotoModifyRedeemCode} />
+            </div>
+        )
+    } else {
+        return (
+            <>
+                <Layout onSignOutHandler={onSignOutHandler} />
+                <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
+            </>
+        )
+    }
+
 }
 
 export async function getServerSideProps(context) {
@@ -79,9 +87,9 @@ export async function getServerSideProps(context) {
                     isRedeemed: ""
                 })
             }
-        }        
+        }
     }
-    
+
     return {
         props: {
             spCourses: tempCourses,
