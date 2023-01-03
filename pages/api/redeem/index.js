@@ -24,7 +24,7 @@ export default async (req, res) => {
                 // send the email
                 sendgrid.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);
                 let msg = {};
-                if (req.body.isExpired == false) {
+                if (req.body.isExpired == false && req.body.isRedeemed == false) {
                     msg = {
                         to: req.body.email,
                         from: process.env.NEXT_PUBLIC_DOMAIN_FROM,
@@ -32,7 +32,9 @@ export default async (req, res) => {
                         text: 'Code: ' + req.body.code,
                         html: `<p>Code: ${req.body.code}</p>`
                     }
-                } else if (req.body.isExpired == true) {
+                    // Disable muna
+                    await sendgrid.send(msg).catch(error => console.log(error));
+                } else if (req.body.isExpired == true && req.body.isRedeemed == false) {
                     msg = {
                         to: req.body.email,
                         from: process.env.NEXT_PUBLIC_DOMAIN_FROM,
@@ -40,10 +42,9 @@ export default async (req, res) => {
                         text: `Your access code ${req.body.code} has now expired`,
                         html: `<p>Your access code ${req.body.code} has now expired</p>`
                     }
+                    // Disable muna
+                    await sendgrid.send(msg).catch(error => console.log(error));
                 }
-
-                // Disable muna
-                await sendgrid.send(msg).catch(error => console.log(error));
 
                 res.status(201).json({ success: true, data: redeem })
             } catch (error) {

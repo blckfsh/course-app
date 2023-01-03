@@ -107,7 +107,7 @@ export default function UpdateRedeem({ spUser }) {
         }
 
         setModalContent(modalResponse);
-        openModal();
+        openModal();        
     }
 
     const onSignOutHandler = async () => {

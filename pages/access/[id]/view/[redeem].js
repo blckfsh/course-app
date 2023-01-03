@@ -80,6 +80,7 @@ export default function RedeemCourse() {
             })
             setModalContent(modalResponse);
             openModal();
+            setTimeout(() => router.replace("/home"), 3000);
         }
     }
 
