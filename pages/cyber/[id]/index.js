@@ -58,16 +58,18 @@ export default function Cyber({ courses }) {
                 <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
                 {
                     role === "admin" ? 
-                    <CyberComp courses={courses} role={role} editCyber={editCyber} /> :
-                    role === "student" && isCodeRedeemed == true?
+                    <CyberComp courses={courses} role={role} editCyber={editCyber} /> : ""
+                }               
+                {
+                    role === "student" && isCodeRedeemed == true ?
                     <CyberComp courses={courses} role={role} editCyber={editCyber} /> : 
+                    role === "student" && isCodeRedeemed == false ?
                     <div className="flex flex-col w-3/4 mx-auto text-center">
                         <div className="flex-1 p-5">
                             <p className="text-2xl font-bold">You do not have an access to this course. Please call your admin</p>
                         </div>
-                    </div>
-                }               
-                
+                    </div> : ""
+                }
             </>
         )
     }

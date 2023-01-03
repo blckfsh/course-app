@@ -67,7 +67,7 @@ export default function Home({ spStudents }) {
         {
           role == "student" ?
           isCodeRedeemed == true ?
-          <Portal /> : <p>You do not have courses yet</p> 
+          <Portal /> : <p>We are loading your content</p> 
           : ""
         }     
         {
