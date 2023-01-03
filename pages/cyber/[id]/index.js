@@ -32,7 +32,11 @@ export default function Cyber({ courses }) {
         const id = await isEmailExisting();
         const callGetRedeemCode = await getRedeemByUserIdAndCourseId(id, router.query.id);
 
-        if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+        setIsPageReady(false);
+        if (callGetRedeemCode.length > 0) {
+            setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+            setIsPageReady(true);
+        }
         return callGetRedeemCode;
     }
 
@@ -45,8 +49,7 @@ export default function Cyber({ courses }) {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
                 getRole(data.user.email);
-                isUserExisting();      
-                setIsPageReady(true);
+                isUserExisting();                
             }
         } catch (error) {
             console.log(error);
@@ -54,7 +57,7 @@ export default function Cyber({ courses }) {
     }, [status]);
 
 
-    if (isPageReady == true) {
+    if (isPageReady === true) {
         return (
             <>
                 <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 

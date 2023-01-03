@@ -32,7 +32,11 @@ export default function Training({ courses }) {
     const id = await isEmailExisting();
     const callGetRedeemCode = await getRedeemByUserIdAndCourseId(id, router.query.id);
 
-    if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+    setIsPageReady(false);
+    if (callGetRedeemCode.length > 0) {
+      setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
+      setIsPageReady(true);
+    }
     return callGetRedeemCode;
   }
 
@@ -46,7 +50,6 @@ export default function Training({ courses }) {
       if (status === "authenticated") {
         getRole(data.user.email);
         isUserExisting();
-        setIsPageReady(true);
       }
     } catch (error) {
       console.log(error);
