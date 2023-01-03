@@ -4,9 +4,9 @@ export default function Redeem(props) {
         props.verifyRedeemCode(code);
     }
     return (
-        <div>
-            <div className="mt-5 lg:w-4/5 w-full flex flex-row items-center justify-center">                
-                <div className="flex-1">
+        <div className="flex justify-center items-center h-screen">
+            <div className="flex-none m-5 lg:w-1/3 w-full">                
+                <div className="flex-1 m-5">
                     <div className="p-4 bg-gray-200 border-2 border-gray-500 rounded-lg">
                         <p className="text-3xl font-bold">Redeem Access</p>
                         <p>Enter your training product access key. If you have multiple access keys, enter and redeem them one at a time.</p>
