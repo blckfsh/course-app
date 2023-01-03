@@ -15,7 +15,7 @@ export default function CoursesComp(props) {
                         </thead>
                         <tbody>
                             {
-                                props.redeems ?
+                                props.redeems.length > 0 ?
                                 props.redeems.map((item, index) => {
                                     return <tr key={index}>
                                         <td className="border py-5 text-lg">{item.title}</td>
@@ -37,7 +37,7 @@ export default function CoursesComp(props) {
                                         </td>
                                     </tr>
                                 }) : <tr>
-                                    <td className="border py-5 text-lg">
+                                    <td colSpan={5} className="border py-5 text-lg">
                                         Loading Contents...
                                     </td>
                                 </tr>
