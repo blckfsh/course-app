@@ -39,7 +39,7 @@ export default function Redeem({ spCourses }) {
         try {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
-                setIsPageReady(true);
+                setIsPageReady(true); // for admin to see the management view
             }
         } catch (error) {
             console.log(error);

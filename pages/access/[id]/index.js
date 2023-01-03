@@ -11,6 +11,7 @@ export default function RedeemCourses({courses}) {
     const [id, setId] = useState();
     const [role, setRole] = useState();
     const [redeems, setRedeems] = useState([]);    
+    const [isPageReady, setIsPageReady] = useState(false);
 
     const getRole = async (email) => {
         const action = await getUserByEmail(email);
@@ -29,6 +30,7 @@ export default function RedeemCourses({courses}) {
 
     const getCoursesWithRedeemedCodes = async () => {
         let tempRedeems = [];
+        setIsPageReady(false);
         courses.map(async (item) => {
             const cs = await getRedeemByUserIdAndCourseId(router.query.id, item._id);
             if (cs.length > 0) {
@@ -53,6 +55,7 @@ export default function RedeemCourses({courses}) {
 
             setRedeems(tempRedeems);
         })
+        setIsPageReady(true); // for admin to see the management view
     }
 
     const goToView = (userId, id) => {
@@ -73,17 +76,30 @@ export default function RedeemCourses({courses}) {
         }
     }, [status]);
 
-
-    return (
-        <div>
-            <Layout
-                onSignOutHandler={onSignOutHandler}
-                role={role}
-                id={id}
-            />
-            <CoursesComp redeems={redeems} goToView={goToView} id={id} />
-        </div>
-    )
+    if (isPageReady === true) {
+        return (
+            <div>
+                <Layout
+                    onSignOutHandler={onSignOutHandler}
+                    role={role}
+                    id={id}
+                />
+                <CoursesComp redeems={redeems} goToView={goToView} id={id} />
+            </div>
+        )
+    } else {
+        return (
+            <>
+                <Layout
+                    onSignOutHandler={onSignOutHandler}
+                    role={role}
+                    id={id}
+                />
+                <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
+            </>
+        )
+    }
+    
 }
 
 export async function getServerSideProps(context) {
