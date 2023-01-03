@@ -32,7 +32,11 @@ export default function CoursesComp(props) {
                                                 item.isRedeemed == false || item.isRedeemed == "" ?
                                                 <a onClick={() => props.goToView(props.id, item.id)} className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
                                                     Redeem
-                                                </a> : ""
+                                                </a> : <tr>
+                                                    <td colSpan={5} className="border py-5 text-lg">
+                                                        Loading Contents...
+                                                    </td>
+                                                </tr>
                                             }                                            
                                         </td>
                                     </tr>
