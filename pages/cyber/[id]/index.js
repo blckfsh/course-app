@@ -10,6 +10,7 @@ export default function Cyber({ courses }) {
     const router = useRouter();
     const [id, setId] = useState("");
     const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
+    const [isPageReady, setIsPageReady] = useState(false);
     const [role, setRole] = useState("");
 
     const getRole = async (email) => {
@@ -44,7 +45,8 @@ export default function Cyber({ courses }) {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
                 getRole(data.user.email);
-                isUserExisting();                
+                isUserExisting();      
+                setIsPageReady(true);
             }
         } catch (error) {
             console.log(error);
@@ -52,7 +54,7 @@ export default function Cyber({ courses }) {
     }, [status]);
 
 
-    if (status === "authenticated") {
+    if (isPageReady == true) {
         return (
             <>
                 <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
