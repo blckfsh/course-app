@@ -41,11 +41,13 @@ export default function UpdateRedeem({ spUser }) {
     const generateCode = async () => {
         const generatedCode = await generate();
         let newCode = {
+            email,
             user_id: router.query.id,
             course_id: router.query.course,
             code: generatedCode
         }
         let updateCode = {
+            email,
             code: generatedCode,
             isRedeemed: false,
             isExpired: false
