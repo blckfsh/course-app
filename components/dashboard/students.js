@@ -6,8 +6,6 @@ export default function Students(props) {
                     <tr>
                         <th className="border py-2 text-xl">Name</th>
                         <th className="border py-2 text-xl">Email Address</th>
-                        <th className="border py-2 text-xl">Redeem Code</th>
-                        <th className="border py-2 text-xl">Is Redeemed</th>
                         <th className="border py-2 text-xl">Actions</th>
                     </tr>
                 </thead>
@@ -18,8 +16,6 @@ export default function Students(props) {
                             return <tr key={index}>
                                 <td className="border py-5 text-lg">{student.name}</td>
                                 <td className="border py-5 text-lg">{student.email}</td>
-                                <td className="border py-5 text-lg">{student.code}</td>
-                                <td className="border py-5 text-lg">{student.isRedeemed}</td>
                                 <td className="border py-5 text-lg">
                                     <a
                                         onClick={() => props.gotoRedeemCode(student.id)}

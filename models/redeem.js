@@ -21,6 +21,9 @@ const RedeemSchema = mongoose.Schema({
     isExpired: {
         type: Boolean,
         default: false
+    },
+    dateCreated: {
+        type: Date
     }
 })
 

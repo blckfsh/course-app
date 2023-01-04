@@ -67,7 +67,9 @@ export default function Home({ spStudents }) {
         {
           role == "student" ?
           isCodeRedeemed == true ?
-          <Portal /> : <p>We are loading your content</p> : ""
+          <Portal /> : 
+          <p className="text-center mt-5">Checking your access keys. If the page is not loaded after 5 minutes. Contact your admin</p> : 
+          <p className="text-center mt-5">We are loading your content</p>
         }     
         {
           role == "admin" ? 

@@ -1,6 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
 import Layout from "../../../components/layout";
 import CoursesComp from "../../../components/redeem/course";
 import { getUserByEmail, getRedeemByUserIdAndCourseId, getCourseById, getCourses } from "../../api/methods/actions";
@@ -40,7 +41,8 @@ export default function RedeemCourses({courses}) {
                     title: item.title,
                     code: cs[0].code,
                     isRedeemed: cs[0].isRedeemed,
-                    isExpired: cs[0].isExpired
+                    isExpired: cs[0].isExpired,
+                    dateCreated: cs[0].dateCreated
                 })
             } else {
                 tempRedeems.push({
@@ -49,7 +51,8 @@ export default function RedeemCourses({courses}) {
                     title: item.title,
                     code: "",
                     isRedeemed: "",
-                    isExpired: ""
+                    isExpired: "",
+                    dateCreated: ""
                 })
             }
 

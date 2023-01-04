@@ -9,9 +9,23 @@ export default function Redeem({ spCourses }) {
     const router = useRouter();
     const { status, data } = useSession();
     const [isPageReady, setIsPageReady] = useState(false);
+    const [role, setRole] = useState();
+    const [id, setId] = useState();
+
+    const getRole = async (email) => {
+        const action = await getUserByEmail(email);
+        if (action.data.data[0].role !== "admin") router.replace("/home");
+        setRole(action.data.data[0].role);
+    }
 
     const onSignOutHandler = async () => {
         await signOut();
+    }
+
+    const isEmailExisting = async () => {
+        const action = await getUserByEmail(data.user.email);
+        setId(action.data.data[0]._id.toString());
+        return action.data.data[0]._id.toString();
     }
 
     // const getAllCourses = async () => {
@@ -39,6 +53,8 @@ export default function Redeem({ spCourses }) {
         try {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
+                getRole(data.user.email);
+                isEmailExisting();
                 setIsPageReady(true); // for admin to see the management view
             }
         } catch (error) {
@@ -49,14 +65,22 @@ export default function Redeem({ spCourses }) {
     if (isPageReady === true) {
         return (
             <div>
-                <Layout onSignOutHandler={onSignOutHandler} />
+                <Layout 
+                    onSignOutHandler={onSignOutHandler} 
+                    role={role}
+                    id={id}
+                />
                 <RedeemComp spCourses={spCourses} gotoModifyRedeemCode={gotoModifyRedeemCode} />
             </div>
         )
     } else {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} />
+                <Layout 
+                    onSignOutHandler={onSignOutHandler} 
+                    role={role}
+                    id={id}
+                />
                 <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
             </>
         )

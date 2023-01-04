@@ -1,10 +1,12 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
 import Layout from "../../../../../components/layout";
 import Update from "../../../../../components/redeem/update";
 import ModalPopup from "../../../../../components/modal";
 import {
+    getUserByEmail,
     getUserDetailsById,
     getAllStudents,
     generate,
@@ -17,6 +19,8 @@ export default function UpdateRedeem({ spUser }) {
     let modalResponse = {};
     const { status, data } = useSession();
     const router = useRouter();
+    const [role, setRole] = useState();
+    const [id, setId] = useState();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [redeemCode, setRedeemCode] = useState(" ");
@@ -29,6 +33,22 @@ export default function UpdateRedeem({ spUser }) {
     const closeModal = async () => await setModalIsOpen(false);
     const afterOpenModal = () => console.log("after opening the modal");
 
+    const getRole = async (email) => {
+        const action = await getUserByEmail(email);
+        if (action.data.data[0].role !== "admin") router.replace("/home");
+        setRole(action.data.data[0].role);
+    }
+
+    const onSignOutHandler = async () => {
+        await signOut();
+    }
+
+    const isEmailExisting = async () => {
+        const action = await getUserByEmail(data.user.email);
+        setId(action.data.data[0]._id.toString());
+        return action.data.data[0]._id.toString();
+    }
+
     const isUserExisting = async () => {
         const action = await getRedeemByUserIdAndCourseId(router.query.id, router.query.course);
         const callGetRedeemCode = await getRedeemByUserIdAndCourseId(router.query.id, router.query.course);
@@ -38,19 +58,29 @@ export default function UpdateRedeem({ spUser }) {
         return action;
     }
 
+    const generateExpiryDate = async () => {
+        const today = new Date();
+        today.setMonth(today.getMonth() + 1); // adding 1 month
+
+        return today;
+    }
+
     const generateCode = async () => {
+        const expiry = await generateExpiryDate();
         const generatedCode = await generate();
         let newCode = {
             email,
             user_id: router.query.id,
             course_id: router.query.course,
-            code: generatedCode
+            code: generatedCode,
+            dateCreated: moment(expiry).format()
         }
         let updateCode = {
             email,
             code: generatedCode,
             isRedeemed: false,
-            isExpired: false
+            isExpired: false,
+            dateCreated: moment(expiry).format()
         }
         setRedeemCode(generatedCode);
 
@@ -110,13 +140,11 @@ export default function UpdateRedeem({ spUser }) {
         openModal();        
     }
 
-    const onSignOutHandler = async () => {
-        await signOut();
-    }
-
     useEffect(() => {
         if (status === "unauthenticated") router.replace("/");
         if (status === "authenticated") {
+            getRole(data.user.email);
+            isEmailExisting();
             setName(spUser[0].name);
             setEmail(spUser[0].email);
         }
@@ -124,7 +152,12 @@ export default function UpdateRedeem({ spUser }) {
 
     return (
         <div>
-            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} />
+            <Layout 
+                onSignOutHandler={onSignOutHandler} 
+                isCodeRedeemed={isCodeRedeemed} 
+                role={role}
+                id={id}
+            />
             <Update
                 name={name}
                 email={email}
