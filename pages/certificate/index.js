@@ -102,8 +102,11 @@ export default function CertificateCourses({ spCourses }) {
                 <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
                 {
                     role === "student" ?
-                    <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} certLink={certLink} /> :
-                    <CertificateComp certs={certs} goToConfirmCertificate={goToConfirmCertificate} />
+                    <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} certLink={certLink} /> : ""
+                }
+                {
+                    role === "admin" ? 
+                    <CertificateComp certs={certs} goToConfirmCertificate={goToConfirmCertificate} /> : ""
                 }
                 <ModalPopup
                     isOpen={modalIsOpen}

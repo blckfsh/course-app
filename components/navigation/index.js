@@ -64,7 +64,10 @@ export default function Navigation(props) {
                                                         {item.name}
                                                     </a>
                                                 </Link>
-                                            )) : 
+                                            )) : ""
+                                        }
+                                        {
+                                            props.role === "admin" ?
                                             adminNavigation.map((item) => (
                                                 <Link
                                                     key={item.name}
@@ -80,7 +83,7 @@ export default function Navigation(props) {
                                                         {item.name}
                                                     </a>
                                                 </Link>
-                                            ))
+                                            )) : ""
                                         }
                                     </div>
                                 </div>
