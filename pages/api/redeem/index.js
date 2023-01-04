@@ -16,7 +16,7 @@ export default async (req, res) => {
             } catch (error) {
                 res.status(400).json({ success: false });
             }
-            break;        
+            break;
         case 'POST':
             try {
                 const redeem = await Redeem.create(req.body);

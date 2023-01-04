@@ -21,6 +21,7 @@ export default function Navigation(props) {
         { name: 'Home', href: '/home', current: true },
         { name: 'Manage Cyber Range', href: '/cyber', current: false },
         { name: 'Manage Training Materials', href: '/training', current: false },
+        { name: 'Manage Redeem', href: '/redeem/secret', current: false },
         { name: 'Manage Digital Certificate', href: '/certificate', current: false }
     ]
 
