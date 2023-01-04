@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { passwordStrength } from "check-password-strength";
@@ -30,7 +31,9 @@ export default function Register(props) {
                     </div>
                 </div>
                 <div className="flex-none w-1/3 flex flex-col items-center justify-center py-5">
-                    <div>LOGO HERE</div>
+                    <div>
+                        <Image src="/synx-system-logo.png" width={200} height={100} />
+                    </div>
                     <div className="mt-5 w-80">
                         <p className="text-lg font-bold">Sign Up</p>
                         <p className="text-sm">Please verify your email address, then create your account.</p>

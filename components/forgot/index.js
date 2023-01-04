@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { passwordStrength } from "check-password-strength";
@@ -29,7 +30,9 @@ export default function ForgotPassword(props) {
                     </div>
                 </div>
                 <div className="flex-none w-1/3 flex flex-col items-center justify-center">
-                    <div>LOGO HERE</div>
+                    <div>
+                        <Image src="/synx-system-logo.png" width={200} height={100} />
+                    </div>
                     <div className="mt-5 w-80">
                         <p className="text-lg font-bold">Forgot Password</p>
                         <p className="text-sm">Enter your email address to receive a verification code and enter it below.</p>
