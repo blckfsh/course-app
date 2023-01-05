@@ -67,7 +67,7 @@ export default function RedeemCourses({courses, codes}) {
             const courseTitle = await getCourseById(item.course_id);            
             if (cs.length > 0) {
                 tempCodes.push({
-                    id: item._id,
+                    id: item.course_id,
                     redeem_id: cs[0]._id,
                     title: courseTitle.data.data[0].title,
                     code: cs[0].code,
@@ -77,7 +77,7 @@ export default function RedeemCourses({courses, codes}) {
                 })
             } else {
                 tempCodes.push({
-                    id: item._id,
+                    id: item.course_id,
                     redeem_id: "",
                     title: courseTitle.data.data[0].title,
                     code: "",

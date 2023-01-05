@@ -12,6 +12,9 @@ export default async (req, res) => {
             try {
                 const user_id = req.query.user_id;
                 const course_id = req.query.course_id;
+
+                console.log(user_id);
+                console.log(course_id);
                 const redeem = await Redeem.find({ user_id, course_id });
 
                 res.status(200).json({ success: true, data: redeem })

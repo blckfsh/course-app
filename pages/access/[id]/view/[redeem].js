@@ -38,6 +38,7 @@ export default function RedeemCourse() {
 
     const isUserExisting = async () => {
         const callGetRedeemCode = await getRedeemByUserIdAndCourseId(router.query.id, router.query.redeem);
+        console.log(callGetRedeemCode);
 
         if (callGetRedeemCode.length > 0) setIsCodeRedeemed(callGetRedeemCode[0].isRedeemed);
         return callGetRedeemCode;
@@ -45,7 +46,7 @@ export default function RedeemCourse() {
 
     const verifyRedeemCode = async (code) => {
         const isExisting = await isUserExisting();
-
+        
         if (isExisting.length > 0) {
             isExisting.map(async (item) => {
                 let userId = item.user_id;
