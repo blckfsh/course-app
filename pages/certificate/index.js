@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById } from "../api/methods/actions";
+import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById, getCertificateByIdAndUserEmail } from "../api/methods/actions";
 import Layout from "../../components/layout";
 import CourseComp from "../../components/certificate/course";
 import CertificateComp from "../../components/certificate";
@@ -14,8 +14,7 @@ export default function CertificateCourses({ spCourses }) {
     const [id, setId] = useState("");
     // const [isCodeRedeemed, setIsCodeRedeemed] = useState(false);
     const [role, setRole] = useState("");
-    const [certLink, setCertLink] = useState("");
-    const [certStatus, setCertStatus] = useState("");
+    const [studentCerts, setStudentCerts] = useState([]);
     const [certs, setCerts] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState({});
@@ -38,15 +37,32 @@ export default function CertificateCourses({ spCourses }) {
 
     const getAllCertificates = async () => {
         const action = await getCertificates();
-        console.log(action);
         setCerts(action);
     }
 
-    const getCertUsingCourseId = async (id) => {
-        const isRequested = await getCertificateById(id);
-        if (isRequested.data.data.length > 0) {
-            setCertStatus(isRequested.data.data[0].status);        
-            setCertLink(isRequested.data.data[0].cert_link);
+    const getCertUsingCourseId = async (email) => {
+        let tempCerts = [];
+        if (spCourses) {
+            spCourses.map(async (item) => {
+                const isRequested = await getCertificateByIdAndUserEmail(email, item.id);
+                if (isRequested.data.data.length > 0) {
+                    tempCerts.push({
+                        id: item.id,
+                        title: item.title,
+                        status: isRequested.data.data[0].status,
+                        link: isRequested.data.data[0].cert_link
+                    })
+                } else {
+                    tempCerts.push({
+                        id: item.id,
+                        title: item.title,
+                        status: "NONE",
+                        link: ""
+                    })
+                }
+            })
+
+            setStudentCerts(tempCerts);
         }
     }
 
@@ -89,7 +105,7 @@ export default function CertificateCourses({ spCourses }) {
                 // isUserExisting();
                 getRole(data.user.email);
                 getAllCertificates();
-                getCertUsingCourseId(spCourses[0].id);
+                getCertUsingCourseId(data.user.email);
             }
         } catch (error) {
             console.log(error);
@@ -102,7 +118,7 @@ export default function CertificateCourses({ spCourses }) {
                 <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
                 {
                     role === "student" ?
-                    <CourseComp spCourses={spCourses} requestCertificate={requestCertificate} certStatus={certStatus} certLink={certLink} /> : ""
+                    <CourseComp studentCerts={studentCerts} requestCertificate={requestCertificate} /> : ""
                 }
                 {
                     role === "admin" ? 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function CourseComp(props) {
+export default function CourseComp(props) {    
     return (
         <div className="mt-5 p-4 w-4/5 mx-auto">
             <div className="flex flex-row items-center">
@@ -14,28 +14,27 @@ export default function CourseComp(props) {
                         </thead>
                         <tbody>
                             {
-                                props.spCourses ?
-                                props.spCourses.map((course, index) => {
+                                props.studentCerts ?
+                                props.studentCerts.map((course, index) => {
                                     return <tr key={index}>
                                         <td className="border py-5 text-lg">{course.title}</td>
                                         <td className="border py-5 text-lg">
                                             {
-                                                props.certStatus == "PENDING" ?
+                                                course.status === "NONE" ?
+                                                <a onClick={() => props.requestCertificate(course.id)} className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
+                                                    Request
+                                                </a> : course.status === "PENDING" ?
                                                 <a disabled={true} className="p-2 mx-2 text-white text-lg font-semibold bg-slate-700">
                                                     Requested
-                                                </a> : props.certStatus == "CONFIRMED" ?
+                                                </a> : course.status === "CONFIRMED" ?
                                                 <a 
-                                                    href={props.certLink}
+                                                    href={course.link}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                     className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
                                                     View
-                                                </a> :
-                                                <a onClick={() => props.requestCertificate(course.id)} className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800">
-                                                    Request
-                                                </a>
+                                                </a> : ""
                                             }
-                                        
                                     </td>
                                 </tr>
                                 }) : ""

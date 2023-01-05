@@ -123,6 +123,11 @@ export const getCertificateById = async (id) => {
     return action;
 }
 
+export const getCertificateByIdAndUserEmail = async (email, id) => {
+    const action = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URI}/api/certificate/${email}/${id}`);
+    return action;
+}
+
 export const requestDigitalCertificate = async (certificate) => {    
     const action = await axios.post(`/api/certificate`, certificate);
     return action;
