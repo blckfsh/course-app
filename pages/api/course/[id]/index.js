@@ -10,7 +10,7 @@ export default async (req, res) => {
         case 'GET':
             try {
                 const id = req.query.id;
-                const course = await Course.find({ id });
+                const course = await Course.find({ _id: id });
 
                 res.status(200).json({ success: true, data: course })
             } catch (error) {

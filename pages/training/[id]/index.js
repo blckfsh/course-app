@@ -50,6 +50,8 @@ export default function Training({ courses }) {
       if (status === "authenticated") {
         getRole(data.user.email);
         isUserExisting();
+        console.log("Fetching thru training...")
+        console.log(courses);
       }
     } catch (error) {
       console.log(error);

@@ -49,7 +49,9 @@ export default function Cyber({ courses }) {
             if (status === "unauthenticated") router.replace("/");
             if (status === "authenticated") {
                 getRole(data.user.email);
-                isUserExisting();                
+                isUserExisting(); 
+                console.log("Fetching thru cyber...");
+                console.log(courses);               
             }
         } catch (error) {
             console.log(error);
