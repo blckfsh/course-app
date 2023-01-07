@@ -73,6 +73,8 @@ export default function UpdateRedeem({ spUser }) {
             user_id: router.query.id,
             course_id: router.query.course,
             code: generatedCode,
+            isRedeemed: false,
+            isExpired: false,
             dateCreated: moment(expiry).format()
         }
         let updateCode = {

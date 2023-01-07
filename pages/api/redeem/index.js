@@ -20,6 +20,8 @@ export default async (req, res) => {
         case 'POST':
             try {
                 const redeem = await Redeem.create(req.body);
+                console.log(req.body.isExpired);
+                console.log(req.body.isRedeemed);
 
                 // send the email
                 sendgrid.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);

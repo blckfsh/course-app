@@ -31,6 +31,7 @@ export default async (req, res) => {
 
                 if (!findId) return res.status(404).json({ message: "No Data Found" });
                 const updatedRedeem = await Redeem.updateOne({_id: id}, {$set: req.body});
+                console.log(req.body.isExpired);
 
                 // send the email
                 sendgrid.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);
