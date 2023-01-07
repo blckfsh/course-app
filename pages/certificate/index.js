@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById, getCertificateByIdAndUserEmail } from "../api/methods/actions";
+import { useEffect, useState, useCallback } from "react";
+import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById, getCertificateByIdAndUserEmail, getCourseById } from "../api/methods/actions";
 import Layout from "../../components/layout";
 import CourseComp from "../../components/certificate/course";
 import CertificateComp from "../../components/certificate";
@@ -40,7 +40,7 @@ export default function CertificateCourses({ spCourses }) {
         setCerts(action);
     }
 
-    const getCertUsingCourseId = async (email) => {
+    const getCertUsingCourseId = useCallback(async (email) => {
         let tempCerts = [];
         if (spCourses) {
             spCourses.map(async (item) => {
@@ -64,21 +64,24 @@ export default function CertificateCourses({ spCourses }) {
 
             setStudentCerts(tempCerts);
         }
-    }
+    }, [studentCerts])
 
-    const requestCertificate = async () => {
+    const requestCertificate = async (id) => {
         const user = await getRole(data.user.email);
+        const course = await getCourseById(id);
 
         let payload = {
-            course_id: spCourses[0].id,
+            course_id: course.data.data[0]._id,
             name: user.firstname + " " + user.lastname,
             email: user.email,
-            cert_title: `Digital Certificate - ${spCourses[0].title}`
+            cert_title: `${course.data.data[0].title} Certificate`
         }
+
+        console.log(payload);
         
         const action = await requestDigitalCertificate(payload);
         if (action.status == 201) {
-            setCertStatus("PENDING");
+            // setCertStatus("PENDING");
             modalResponse = {
                 title: "Request Certificate",
                 message: "Certificate was successfully requested"
