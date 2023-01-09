@@ -8,13 +8,12 @@ function classNames(...classes) {
 }
 
 export default function Navigation(props) {
-
     const navigation = [
         { name: 'Home', href: '/home', current: true },
         { name: 'Cyber Range', href: '/cyber', current: false },
         { name: 'Training Materials', href: '/training', current: false },
         { name: 'Redeem Access Keys', href: `/access/${props.id}`, current: false },
-        { name: 'Digital Certificate', href: '/certificate', current: false }
+        { name: 'Digital Certificate', href: `/certificate/user/${props.email}`, current: false }
     ]
     
     const adminNavigation = [
@@ -22,7 +21,7 @@ export default function Navigation(props) {
         { name: 'Manage Cyber Range', href: '/cyber', current: false },
         { name: 'Manage Training Materials', href: '/training', current: false },
         { name: 'Manage Redeem', href: '/redeem/secret', current: false },
-        { name: 'Manage Digital Certificate', href: '/certificate', current: false }
+        { name: 'Manage Digital Certificate', href: `/certificate/user/${props.email}`, current: false }
     ]
 
     return (

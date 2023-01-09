@@ -26,12 +26,15 @@ export default function CertificateComp(props) {
                                     <td className="border py-5 text-lg">{moment(cert.expiredOn).format("MMM Do YY")}</td>
                                     <td className="border py-5 text-lg">{cert.status}</td>
                                     <td className="border py-5 text-lg">
-                                        <a
-                                            className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800"
-                                            onClick={() => props.goToConfirmCertificate(cert._id)}
-                                        >
-                                            Confirm
-                                        </a>
+                                        {
+                                            cert.status === "PENDING" ? 
+                                            <a
+                                                className="cursor-pointer p-2 mx-2 text-white text-lg font-semibold bg-cyan-700 hover:bg-cyan-800"
+                                                onClick={() => props.goToConfirmCertificate(cert._id)}
+                                            >
+                                                Confirm
+                                            </a> : ""
+                                        }                                        
                                     </td>
                                 </tr>
                             })

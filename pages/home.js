@@ -53,6 +53,7 @@ export default function Home({ spStudents }) {
         getRole(data.user.email);
         setStudents(spStudents);
         isUserExisting();
+        console.log(data.user.email);
       }
     } catch (error) {
       console.log(error);
@@ -62,7 +63,7 @@ export default function Home({ spStudents }) {
   if (status === "authenticated") {
     return (
       <div>
-        <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
+        <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} email={data.user.email.toString()} />
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?

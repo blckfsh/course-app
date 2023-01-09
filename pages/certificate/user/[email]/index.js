@@ -1,11 +1,11 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState, useCallback } from "react";
-import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById, getCertificateByIdAndUserEmail, getCourseById } from "../api/methods/actions";
-import Layout from "../../components/layout";
-import CourseComp from "../../components/certificate/course";
-import CertificateComp from "../../components/certificate";
-import ModalPopup from "../../components/modal";
+import { useEffect, useState } from "react";
+import { getUserByEmail, getCourses, getCertificates, requestDigitalCertificate, getCertificateById, getCertificateByIdAndUserEmail, getCourseById } from "../../../api/methods/actions";
+import Layout from "../../../../components/layout";
+import CourseComp from "../../../../components/certificate/course";
+import CertificateComp from "../../../../components/certificate";
+import ModalPopup from "../../../../components/modal";
 
 export default function CertificateCourses({ spCourses }) {
     let modalResponse = {};
@@ -40,31 +40,34 @@ export default function CertificateCourses({ spCourses }) {
         setCerts(action);
     }
 
-    const getCertUsingCourseId = useCallback(async (email) => {
-        let tempCerts = [];
-        if (spCourses) {
-            spCourses.map(async (item) => {
-                const isRequested = await getCertificateByIdAndUserEmail(email, item.id);
-                if (isRequested.data.data.length > 0) {
-                    tempCerts.push({
-                        id: item.id,
-                        title: item.title,
-                        status: isRequested.data.data[0].status,
-                        link: isRequested.data.data[0].cert_link
-                    })
-                } else {
-                    tempCerts.push({
-                        id: item.id,
-                        title: item.title,
-                        status: "NONE",
-                        link: ""
-                    })
-                }
-            })
+    // const getCertUsingCourseId = useCallback(async (email) => {
+    //     let tempCerts = [];
+    //     const action1 = await getCourses();
+    //     if (action1.data.data.length > 0) {
+    //         action1.data.data.map(async (item) => {
+    //             const isRequested = await getCertificateByIdAndUserEmail(email, item.id);
+    //             if (isRequested.data.data.length > 0) {
+    //                 tempCerts.push({
+    //                     id: item.id,
+    //                     title: item.title,
+    //                     status: isRequested.data.data[0].status,
+    //                     link: isRequested.data.data[0].cert_link
+    //                 })
+    //             } else {
+    //                 tempCerts.push({
+    //                     id: item.id,
+    //                     title: item.title,
+    //                     status: "NONE",
+    //                     link: ""
+    //                 })
+    //             }
+    //         })
 
-            setStudentCerts(tempCerts);
-        }
-    }, [studentCerts])
+    //         console.log("Fetching data...");
+    //         console.log(tempCerts);
+    //         setStudentCerts(tempCerts);
+    //     }
+    // }, [studentCerts])
 
     const requestCertificate = async (id) => {
         const user = await getRole(data.user.email);
@@ -95,10 +98,12 @@ export default function CertificateCourses({ spCourses }) {
         
         await setModalContent(modalResponse);
         await openModal();
+
+        setTimeout(() => router.replace("/home"), 2000);
     }
 
     const goToConfirmCertificate = async (id) => {
-        router.push(`/certificate/${id}/confirmCertificate`);
+        router.replace(`/certificate/${id}/confirmCertificate`);
     }
 
     useEffect(() => {
@@ -108,7 +113,8 @@ export default function CertificateCourses({ spCourses }) {
                 // isUserExisting();
                 getRole(data.user.email);
                 getAllCertificates();
-                getCertUsingCourseId(data.user.email);
+                // getCertUsingCourseId(data.user.email);
+                console.log(spCourses);
             }
         } catch (error) {
             console.log(error);
@@ -121,7 +127,7 @@ export default function CertificateCourses({ spCourses }) {
                 <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
                 {
                     role === "student" ?
-                    <CourseComp studentCerts={studentCerts} requestCertificate={requestCertificate} /> : ""
+                    <CourseComp studentCerts={spCourses} requestCertificate={requestCertificate} /> : ""
                 }
                 {
                     role === "admin" ? 
@@ -140,17 +146,31 @@ export default function CertificateCourses({ spCourses }) {
     return <div>loading</div>;
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
     let tempCourses = [{}];
+    
     const action1 = await getCourses();
 
     if (action1.data.data.length > 0) {
         tempCourses.pop();
         for (let x = 0; x <= parseInt(action1.data.data.length) - 1; x++) {
-            tempCourses.push({
-                id: action1.data.data[x]._id,
-                title: action1.data.data[x].title
-            })
+            const isRequested = await getCertificateByIdAndUserEmail(context.params.email, action1.data.data[x]._id);
+
+            if (isRequested.data.data.length > 0) {
+                tempCourses.push({
+                    id: action1.data.data[x]._id,
+                    title: action1.data.data[x].title,
+                    status: isRequested.data.data[0].status,
+                    link: isRequested.data.data[0].cert_link
+                })
+            } else {
+                tempCourses.push({
+                    id: action1.data.data[x]._id,
+                    title: action1.data.data[x].title,
+                    status: "NONE",
+                    link: ""
+                })
+            }
         }        
     }
     

@@ -63,6 +63,8 @@ export default function ConfirmCertificate({ certificate }) {
 
         await setModalContent(modalResponse);
         await openModal();
+
+        setTimeout(() => router.replace("/home"), 2000);
     }
 
     useEffect(() => {
