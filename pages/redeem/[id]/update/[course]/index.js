@@ -159,6 +159,7 @@ export default function UpdateRedeem({ spUser }) {
                 isCodeRedeemed={isCodeRedeemed} 
                 role={role}
                 id={id}
+                email={data.user.email}
             />
             <Update
                 name={name}

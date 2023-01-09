@@ -62,7 +62,7 @@ export default function Training({ courses }) {
   if (isPageReady == true) {
     return (
       <>
-        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} />
+        <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} email={data.user.email} />
         {
           role === "admin" ?
             <TrainingComp courses={courses} role={role} editTraining={editTraining} /> : ""
@@ -82,7 +82,7 @@ export default function Training({ courses }) {
   } else {
     return (
         <>
-            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
+            <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} email={data.user.email} /> 
             <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
         </>
     )

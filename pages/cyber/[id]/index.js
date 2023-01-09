@@ -62,7 +62,7 @@ export default function Cyber({ courses }) {
     if (isPageReady === true) {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} email={data.user.email} /> 
                 {
                     role === "admin" ? 
                     <CyberComp courses={courses} role={role} editCyber={editCyber} /> : ""
@@ -82,7 +82,7 @@ export default function Cyber({ courses }) {
     } else {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} /> 
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} id={id} email={data.user.email} /> 
                 <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
             </>
         )

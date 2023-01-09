@@ -69,6 +69,7 @@ export default function Redeem({ spCourses }) {
                     onSignOutHandler={onSignOutHandler} 
                     role={role}
                     id={id}
+                    email={data.user.email}
                 />
                 <RedeemComp spCourses={spCourses} gotoModifyRedeemCode={gotoModifyRedeemCode} />
             </div>

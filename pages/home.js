@@ -43,6 +43,7 @@ export default function Home({ spStudents }) {
   /* ==================== STUDENT SECTION ==================== */
 
   const onSignOutHandler = async () => {
+    await router.replace("/");
     await signOut();
   }
 
@@ -63,7 +64,7 @@ export default function Home({ spStudents }) {
   if (status === "authenticated") {
     return (
       <div>
-        <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} email={data.user.email.toString()} />
+        <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} email={data.user.email} />
         <Intro name={data.user.name.toString()} />
         {
           role == "student" ?

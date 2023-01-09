@@ -125,6 +125,7 @@ export default function RedeemCourses({courses, codes}) {
                     onSignOutHandler={onSignOutHandler}
                     role={role}
                     id={id}
+                    email={data.user.email}
                 />
                 {
                     role === "admin" ?
@@ -143,6 +144,7 @@ export default function RedeemCourses({courses, codes}) {
                     onSignOutHandler={onSignOutHandler}
                     role={role}
                     id={id}
+                    email={data.user.email}
                 />
                 <div className="flex flex-row justify-center text-3xl font-bold">Loading...</div>
             </>

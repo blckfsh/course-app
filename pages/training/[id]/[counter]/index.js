@@ -80,7 +80,7 @@ export default function EditTraining({ course }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} />
+                <Layout onSignOutHandler={onSignOutHandler} isCodeRedeemed={isCodeRedeemed} role={role} email={data.user.email} />
                 <EditTrainingComp 
                     id={id}
                     counter={counter} 

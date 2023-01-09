@@ -84,7 +84,7 @@ export default function ConfirmCertificate({ certificate }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
+                <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} email={data.user.email} />
                 <Confirm
                     certId={certId}
                     name={name}

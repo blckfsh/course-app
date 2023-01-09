@@ -104,6 +104,7 @@ export default function RedeemCourse() {
                 onSignOutHandler={onSignOutHandler}
                 role={role}
                 id={id}
+                email={data.user.email}
             />
             <Redeem 
                 code={code}

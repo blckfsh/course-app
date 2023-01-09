@@ -124,7 +124,7 @@ export default function CertificateCourses({ spCourses }) {
     if (status === "authenticated") {
         return (
             <>
-                <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} />
+                <Layout onSignOutHandler={onSignOutHandler} role={role} id={id} email={data.user.email} />
                 {
                     role === "student" ?
                     <CourseComp studentCerts={spCourses} requestCertificate={requestCertificate} /> : ""
