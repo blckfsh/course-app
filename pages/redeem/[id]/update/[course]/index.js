@@ -40,8 +40,9 @@ export default function UpdateRedeem({ spUser }) {
     }
 
     const onSignOutHandler = async () => {
+        await router.replace("/");
         await signOut();
-    }
+      }
 
     const isEmailExisting = async () => {
         const action = await getUserByEmail(data.user.email);

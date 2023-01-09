@@ -19,8 +19,9 @@ export default function CyberCourses({ spCourses }) {
     }
 
     const onSignOutHandler = async () => {
+        await router.replace("/");
         await signOut();
-    }
+      }
 
     const goToCyberLab = (id) => {
         router.push(`/cyber/${id}`);

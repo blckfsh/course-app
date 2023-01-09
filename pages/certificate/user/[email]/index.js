@@ -32,8 +32,9 @@ export default function CertificateCourses({ spCourses }) {
     }
 
     const onSignOutHandler = async () => {
+        await router.replace("/");
         await signOut();
-    }
+      }
 
     const getAllCertificates = async () => {
         const action = await getCertificates();

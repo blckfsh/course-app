@@ -27,8 +27,9 @@ export default function RedeemCourse() {
     }
 
     const onSignOutHandler = async () => {
+        await router.replace("/");
         await signOut();
-    }
+      }
 
     const isEmailExisting = async () => {
         const action = await getUserByEmail(data.user.email);

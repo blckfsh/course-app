@@ -19,6 +19,7 @@ export default function Training({ courses }) {
   }
 
   const onSignOutHandler = async () => {
+    await router.replace("/");
     await signOut();
   }
 

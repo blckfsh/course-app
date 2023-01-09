@@ -18,7 +18,8 @@ export default function Training({ courses }) {
     }
 
     const onSignOutHandler = async () => {
-        await signOut();
+      await router.replace("/");
+      await signOut();
     }
 
     const isEmailExisting = async () => {

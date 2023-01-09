@@ -34,8 +34,9 @@ export default function ConfirmCertificate({ certificate }) {
     }
 
     const onSignOutHandler = async () => {
+        await router.replace("/");
         await signOut();
-    }
+      }
 
     const getStudentDetailsByCertId = async (id) => {
         const action = await getCertificateById(id);
