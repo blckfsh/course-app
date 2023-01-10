@@ -99,25 +99,29 @@ export default function RedeemCourse() {
         }
     }, [status]);
 
-    return (
-        <div>
-            <Layout
-                onSignOutHandler={onSignOutHandler}
-                role={role}
-                id={id}
-                email={data.user.email}
-            />
-            <Redeem 
-                code={code}
-                setCode={setCode}
-                verifyRedeemCode={verifyRedeemCode}
-            />            
-            <ModalPopup
-                isOpen={modalIsOpen}
-                onAfterOpen={afterOpenModal}
-                onRequestClose={closeModal}
-                modalContent={modalContent}
-            />
-        </div>
-    )
+    if (status === "authenticated") {
+        return (
+            <div>
+                <Layout
+                    onSignOutHandler={onSignOutHandler}
+                    role={role}
+                    id={id}
+                    email={data.user.email}
+                />
+                <Redeem 
+                    code={code}
+                    setCode={setCode}
+                    verifyRedeemCode={verifyRedeemCode}
+                />            
+                <ModalPopup
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    modalContent={modalContent}
+                />
+            </div>
+        )
+    }
+    
+    return <div>loading</div>;
 }

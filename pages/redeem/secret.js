@@ -75,17 +75,21 @@ export default function Secret() {
         }
     }, [status]);
 
-    return (
-        <>
-            <Layout
-                onSignOutHandler={onSignOutHandler}
-                role={role}
-                id={id}
-                email={data.user.email}
-            />
-            <div className="container mx-auto text-center mt-5">
-                Fixing data in 60 seconds. It will redirect to homepage once the bot is done reading the script...
-            </div>
-        </>
-    )
+    if (status === "authenticated") {
+        return (
+            <>
+                <Layout
+                    onSignOutHandler={onSignOutHandler}
+                    role={role}
+                    id={id}
+                    email={data.user.email}
+                />
+                <div className="container mx-auto text-center mt-5">
+                    Fixing data in 60 seconds. It will redirect to homepage once the bot is done reading the script...
+                </div>
+            </>
+        )
+    }    
+    
+    return <div>loading</div>;
 }
