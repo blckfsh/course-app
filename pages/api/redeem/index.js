@@ -31,8 +31,24 @@ export default async (req, res) => {
                         to: req.body.email,
                         from: process.env.NEXT_PUBLIC_DOMAIN_FROM,
                         subject: 'Access Code for Course',
-                        text: 'Code: ' + req.body.code,
-                        html: `<p>Code: ${req.body.code}</p>`
+                        text: `
+                            Good day,
+                            Welcome to SynTechNX, here is you access code ${req.body.code} for the course, 
+                            the code will expire after 1 month from the day of activation,
+                            if you have any problems accessing the course, please contact admin (admin@syntechnx.com)
+                            Kind Regards,
+                            Admin
+                        `,
+                        html: `
+                        <p>Good day,</p>
+                        <p>
+                            Welcome to SynTechNX, here is you access code ${req.body.code} for the course, 
+                            the code will expire after 1 month from the day of activation,
+                            if you have any problems accessing the course, please contact admin (admin@syntechnx.com)
+                        </p><br />
+                        <p>Kind Regards,</p>
+                        <p>Admin</p>
+                    `
                     }
                     // Disable muna
                     await sendgrid.send(msg).catch(error => console.log(error));
@@ -41,8 +57,22 @@ export default async (req, res) => {
                         to: req.body.email,
                         from: process.env.NEXT_PUBLIC_DOMAIN_FROM,
                         subject: 'Expiration of Access Code',
-                        text: `Your access code ${req.body.code} has now expired`,
-                        html: `<p>Your access code ${req.body.code} has now expired</p>`
+                        text: `
+                            Good day,
+                            Your access code ${req.body.code} for the course has expired, 
+                            please contact admin (admin@syntechnx.com) for any concerns.
+                            Kind Regards,
+                            Admin
+                        `,
+                        html: `
+                            <p>Good day,</p>
+                            <p>
+                                Your access code ${req.body.code} for the course has expired, 
+                                please contact admin (admin@syntechnx.com) for any concerns.
+                            </p><br/>
+                            <p>Kind Regards,</p>
+                            <p>Admin</p>
+                        `
                     }
                     // Disable muna
                     await sendgrid.send(msg).catch(error => console.log(error));

@@ -30,8 +30,20 @@ export default async (req, res) => {
                     to: req.body.email,
                     from: process.env.NEXT_PUBLIC_DOMAIN_FROM,
                     subject: 'Your Verification Code - Reset Password',
-                    text: 'Code: ' + req.body.code,
-                    html: `<p>Code: ${req.body.code}</p>`
+                    text: `
+                        Good day,
+                        Thank you for signing up to SynTechNX, here is you access code ${req.body.code} to the portal.
+                        If you have any problems accessing the course, please contact admin (admin@syntechnx.com)
+                        Kind Regards,
+                        Admin
+                    `,
+                    html: `
+                        <p>Good day,</p>
+                        <p>Thank you for signing up to SynTechNX, here is you access code ${req.body.code} to the portal.</p>
+                        <p>If you have any problems accessing the course, please contact admin (admin@syntechnx.com)</p><br />
+                        <p>Kind Regards,</p>
+                        <p>Admin</p>
+                    `
                 }
 
                 // Disable muna
